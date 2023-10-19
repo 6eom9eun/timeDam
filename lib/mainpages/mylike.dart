@@ -11,7 +11,7 @@ class _MyLikeState extends State<MyLike> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text('좋아요한 글'),
+      child: Text('좋아요한 글'),//
     );
   }
 }
