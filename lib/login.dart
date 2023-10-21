@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(backgroundColor: Color(0xFFF4B353),
         automaticallyImplyLeading: false,
         title: Text(
-          '로그인ㅎ',
+          '로그인',
           style: TextStyle(fontFamily:'Gugi',fontSize: 35.0),  // 이 부분에서 fontSize를 조절합니다.
         ),
         centerTitle: true,
@@ -41,6 +41,10 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () => Navigator.pushNamed(context, '/signup'),
                   child: const Text(
                     "회원가입",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Color(0xFFF4B353), // 원하는 색상으로 변경
+                    ),
                   ),
                 ),
               ],
@@ -62,13 +66,26 @@ class _LoginPageState extends State<LoginPage> {
           return null;
         }
       },
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(),
+      decoration: InputDecoration(
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xFFF4B353), // 일반 상태의 테두리 색상 변경
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xFFF4B353), // 포커스 상태의 테두리 색상 변경
+          ),
+        ),
         hintText: '이메일을 입력하세요.',
         labelText: '이메일 주소',
         labelStyle: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
+          color: Color(0xFFF4B353), // 라벨 텍스트 색상 변경
+        ),
+        hintStyle: TextStyle(
+          color: Color(0xFFF4B353), // 힌트 텍스트 색상 변경
         ),
       ),
     );
@@ -86,17 +103,31 @@ class _LoginPageState extends State<LoginPage> {
           return null;
         }
       },
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(),
+      decoration: InputDecoration(
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xFFF4B353), // 일반 상태의 테두리 색상 변경
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xFFF4B353), // 포커스 상태의 테두리 색상 변경
+          ),
+        ),
         hintText: '비밀번호를 입력하세요.',
         labelText: '비밀번호',
         labelStyle: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
+          color: Color(0xFFF4B353), // 라벨 텍스트 색상 변경
+        ),
+        hintStyle: TextStyle(
+          color: Color(0xFFF4B353), // 힌트 텍스트 색상 변경
         ),
       ),
     );
   }
+
 
   ElevatedButton loginButton() {
     return ElevatedButton(
@@ -126,6 +157,9 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+    style: ElevatedButton.styleFrom(
+      primary: Color(0xFFF4B353), // 원하는 색상으로 변경
+    ),
     );
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -10,8 +12,6 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('마이페이지'),
-    );
+    return Center();
   }
 }

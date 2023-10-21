@@ -5,6 +5,7 @@ import 'package:memo_re/mainpages/mypage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 
+
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
