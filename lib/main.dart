@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:memo_re/landingpage.dart';
-import 'package:memo_re/mainpage.dart';
+import 'package:memo_re/login.dart';
+import 'package:memo_re/signup.dart';
+import 'package:memo_re/home.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();  // 바인딩 초기화
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
   runApp(const MyApp());
 }
 
@@ -13,13 +17,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      initialRoute: '/LandingPage',
-      // Set this if you want your app to start on MainPage
-      getPages: [
-        GetPage(name: '/', page: () => LandingPage()),
-        GetPage(name: '/MainPage', page: () => MainPage()),
-      ],
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomePage(),
+        '/login': (context) => const LoginPage(),
+        '/signup': (context) => const SignupPage(),
+      },
     );
   }
 }

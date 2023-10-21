@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:memo_re/mainpage.dart';
+import 'package:memo_re/mainpages/mainpage.dart';
 
 
 class LandingPage extends StatefulWidget {
@@ -15,9 +14,12 @@ class _LandingPageState extends State<LandingPage> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () {
-      Get.offAll(() => MainPage());
-    });
+    _navigateToMainPage();
+  }
+
+  _navigateToMainPage() async {
+    await Future.delayed(Duration(seconds: 2)); // 3초 동안 대기
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPage()));
   }
 
   @override
