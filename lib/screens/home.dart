@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:memo_re/screens/writePage.dart';
 
 final firestore = FirebaseFirestore.instance;
 
@@ -33,7 +34,12 @@ class _HomeState extends State<Home> {
               ),
               SizedBox(height: 15),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => WritePage()),
+                  );
+                },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(
