@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memo_re/login.dart';
 import 'package:memo_re/signup.dart';
 import 'package:memo_re/home.dart';
+import 'package:memo_re/landingpage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const HomePage(),
         '/login': (context) => const LoginPage(),
         '/signup': (context) => const SignupPage(),
+        '/landing' : (context) => const LandingPage(),
       },
     );
   }
