@@ -31,32 +31,14 @@ class _HomeState extends State<Home> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 60),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text(
-                  '추억 생성',
-                  style: TextStyle(fontSize: 20),
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.amber,
-                  onPrimary: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-              ),
               SizedBox(height: 15),
               ElevatedButton(
                 onPressed: () {},
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.mic, size: 45),
-                    ],
+                  child: Text(
+                    '추억 생성',
+                    style: TextStyle(fontSize: 20),
                   ),
                 ),
                 style: ElevatedButton.styleFrom(

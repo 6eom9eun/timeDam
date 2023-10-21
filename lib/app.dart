@@ -17,7 +17,7 @@ class _MyAppState extends State<MyApp> {
         '/login': (context) => const LoginPage(),
         '/home': (context) => const MainPage(),
       },
-      initialRoute: '/login',
+      initialRoute: '/login', //초기 라우트
       home: const LoginPage(),
       theme: ThemeData(
         fontFamily: 'Noto_Sans_KR',
