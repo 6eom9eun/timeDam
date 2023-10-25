@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:memo_re/utils/vars.dart';
 import 'package:provider/provider.dart';
 import 'package:memo_re/providers/postProvider.dart';
+import 'package:http/http.dart' as http;
 
 // 게시물 올리기, 추억 생성
 
@@ -49,10 +50,22 @@ class _WritePageState extends State<WritePage> {
             ),
             TextButton(
               child: Text('확인'),
-              onPressed: () {
-                // 여기서 입력된 텍스트를 처리할 수 있음
-                print('입력된 텍스트: ${_textController.text}');
+              onPressed: () async {
+                final inputText = _textController.text;
+                print('입력된 텍스트: $inputText');
                 Navigator.of(context).pop();
+
+                // 서버로 데이터를 전송
+                final response = await http.post(
+                Uri.parse('SERVER_URL'), // 추후 플라스크 서버 URL 입력
+                body: {'text': inputText}, // POST 요청으로 보낼 데이터
+                );
+
+                if (response.statusCode == 200) {
+                print('데이터 전송 성공: ${response.body}');
+                } else {
+                  print('데이터 전송 실패: ${response.statusCode}');
+                }
               },
             ),
           ],
@@ -97,7 +110,7 @@ class _WritePageState extends State<WritePage> {
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor(), // 앱바의 색상 설정
         title: Text(
-          'Upload Image',
+          '메모:re',
           style: TextStyle(fontFamily:'Gugi',fontSize: 35.0),
         ),
         centerTitle: true,
