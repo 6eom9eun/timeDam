@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:memo_re/utils/vars.dart';
-import 'package:intl/intl.dart';
+
+// 캘린더 위젯
 
 class Calendar2 extends StatefulWidget {
   final DateTime focusedDay;

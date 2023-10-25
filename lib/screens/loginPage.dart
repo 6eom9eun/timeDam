@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:memo_re/providers/loginProvider.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -63,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(width: 2, color: Color(0xFFF4C54F)),
+                  side: const BorderSide(width: 2, color: Color(0xFF000000)),
                   fixedSize: const Size(300, 55),
                   backgroundColor: Colors.white,
                 ),
@@ -72,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
-                    color: Color(0xFFF4C54F),
+                    color: Color(0xFF000000),
                   ),
                 ),
                 icon: Image.asset(
@@ -97,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: const Text(
                   '익명 로그인',
                   style: TextStyle(
-                    color: Color(0xFFF4C54F),
+                    color: Color(0xFF000000),
                   ),
                 ),
               ),

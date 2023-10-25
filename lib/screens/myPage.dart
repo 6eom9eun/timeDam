@@ -65,8 +65,8 @@ class _MyPageState extends State<MyPage> {
             ),
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
                 color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
               ),
               margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
               child: const Column(
@@ -76,26 +76,6 @@ class _MyPageState extends State<MyPage> {
                   ),
                   SettingContainerText(
                     title: "4",
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-              child: const Column(
-                children: [
-                  SettingContainerText(
-                    title: "5",
-                  ),
-                  SettingContainerText(
-                    title: "6",
-                  ),
-                  SettingContainerText(
-                    title: "7",
                   ),
                 ],
               ),
