@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:memo_re/utils/vars.dart';
 import 'package:provider/provider.dart';
 import 'package:memo_re/providers/postProvider.dart';
 
@@ -92,8 +93,14 @@ class _WritePageState extends State<WritePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.yellow[50],
       appBar: AppBar(
-        title: Text('Upload Image'),
+        backgroundColor: AppColors.primaryColor(), // 앱바의 색상 설정
+        title: Text(
+          'Upload Image',
+          style: TextStyle(fontFamily:'Gugi',fontSize: 35.0),
+        ),
+        centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.close),
           onPressed: () {
@@ -111,16 +118,25 @@ class _WritePageState extends State<WritePage> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: getImage,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amber[800],
+              ),
               child: Text('Pick Image from Gallery'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: getText,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amber[800],
+              ),
               child: Text('Enter Text'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: uploadFile,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amber[800],
+              ),
               child: Text('Upload to Firebase'),
             ),
           ],
