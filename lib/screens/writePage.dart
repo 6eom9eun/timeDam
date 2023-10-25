@@ -11,6 +11,40 @@ class WritePage extends StatefulWidget {
 class _WritePageState extends State<WritePage> {
   File? _image;
   final picker = ImagePicker();
+  TextEditingController _textController = TextEditingController();
+
+  Future getText() async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('추억 생성'),
+          content: TextFormField(
+            controller: _textController,
+            decoration: InputDecoration(
+              labelText: '추억하고 싶은 단어를 입력해주세요',
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('확인'),
+              onPressed: () {
+                // 여기서 입력된 텍스트를 처리할 수 있음
+                print('입력된 텍스트: ${_textController.text}');
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Future getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -61,6 +95,11 @@ class _WritePageState extends State<WritePage> {
             ElevatedButton(
               onPressed: getImage,
               child: Text('Pick Image from Gallery'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: getText,
+              child: Text('Enter Text'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
