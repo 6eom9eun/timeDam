@@ -2,6 +2,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:provider/provider.dart';
+import 'package:memo_re/providers/postProvider.dart';
+
+// 게시물 올리기, 추억 생성
+
+class PostProviderModel with ChangeNotifier {
+  String? _imageUrl;
+  String? get imageUrl => _imageUrl;
+
+  set imageUrl(String? url) {
+    _imageUrl = url;
+    notifyListeners();
+  }
+}
 
 class WritePage extends StatefulWidget {
   @override
@@ -66,7 +80,10 @@ class _WritePageState extends State<WritePage> {
     try {
       final ref = FirebaseStorage.instance.ref(destination);
       await ref.putFile(_image!);
-      print('File uploaded to Firebase Storage!');
+      final url = await ref.getDownloadURL();
+
+      Provider.of<PostProvider>(context, listen: false).imageUrl = url;
+      print('File uploaded to Firebase Storage! URL: $url');
     } catch (e) {
       print('uploadFile error: $e');
     }

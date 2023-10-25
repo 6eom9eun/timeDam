@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memo_re/widgets/calendar2_widget.dart';
-
+import 'package:provider/provider.dart';
+import 'package:memo_re/providers/postProvider.dart';
 
 class MemoryPage extends StatefulWidget {
   const MemoryPage({super.key});
@@ -25,10 +26,35 @@ class _MemoryPageState extends State<MemoryPage> {
     return Scaffold(
       backgroundColor: Colors.yellow[50],
       body: Center(
-        child: Calendar2(
-          focusedDay: _focusedDay,
-          selectedDay: _selectedDay,
-          onDaySelected: _onDaySelected,
+        child: Column(
+          children: [
+            Calendar2(
+              focusedDay: _focusedDay,
+              selectedDay: _selectedDay,
+              onDaySelected: _onDaySelected,
+            ),
+
+            // 이거 post 보여지는 거 위젯화 필요.
+            const SizedBox(height: 20),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Consumer<PostProvider>(
+                  builder: (context, postProvider, child) {
+                    return postProvider.imageUrl != null
+                        ? Container(
+                      width:double.infinity,
+                      height: 200,
+                      child: Image.network(
+                        postProvider.imageUrl!,
+                        fit: BoxFit.fill,
+                      ),
+                    )
+                        : Text('No image selected.');
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

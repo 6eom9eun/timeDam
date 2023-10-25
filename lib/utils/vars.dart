@@ -1,4 +1,4 @@
-// 폰트랑 색상
+// 폰트랑 색상 모음
 import 'dart:ui';
 
 class AppColors {

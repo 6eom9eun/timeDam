@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:memo_re/utils/vars.dart';
 
+// 세팅 위젯
+
 class SettingContainerText extends StatelessWidget {
   final String title;
   final String? information;
