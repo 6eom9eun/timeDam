@@ -44,8 +44,8 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 200.0),
               Image.asset(
                 "assets/main_logo.png",
-                width: 500,
-                height: 500,
+                width: 300,
+                height: 300,
               ),
               const SizedBox(height: 10.0),
               OutlinedButton.icon(
@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(width: 1, color: Color(0xFF000000)),
+                  side: const BorderSide(width: 2, color: Color(0xFFAAAAAA)),
                   fixedSize: const Size(300, 55),
                   backgroundColor: Colors.white,
                 ),
@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
-                    color: Color(0xFF000000),
+                    color: Color(0xFFAAAAAA),
                   ),
                 ),
                 icon: Image.asset(
@@ -93,10 +93,14 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   }
                 },
-                child: const Text(
-                  '익명 로그인',
+                style: OutlinedButton.styleFrom(
+                  primary: Color(0xFFAAAAAA), // 텍스트 색상
+                  side: BorderSide(color: Color(0xFFAAAAAA), width: 2.0), // 외곽선 색상과 두께
+                ),
+                child: const Text('익명 로그인',
                   style: TextStyle(
-                    color: Color(0xFF000000),
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
