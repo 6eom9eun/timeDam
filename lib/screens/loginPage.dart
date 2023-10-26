@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(width: 2, color: Color(0xFF000000)),
+                  side: const BorderSide(width: 1, color: Color(0xFF000000)),
                   fixedSize: const Size(300, 55),
                   backgroundColor: Colors.white,
                 ),
