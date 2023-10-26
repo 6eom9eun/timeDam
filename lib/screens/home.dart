@@ -1,9 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:memo_re/screens/writePage.dart';
 
 final firestore = FirebaseFirestore.instance;
-
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -33,32 +33,21 @@ class _HomeState extends State<Home> {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 15),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => WritePage()),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    '추억 생성',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.amber[800],
-                  onPrimary: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            CupertinoPageRoute(builder: (context) => WritePage()),
+          );
+        },
+        child: Icon(Icons.create, size: 35), // 아이콘 크기 조정
+        backgroundColor: Colors.amber[800],
+        elevation: 10, // 그림자 강도
+        highlightElevation: 15, // 버튼을 눌렀을 때 그림자 강도
       ),
     );
   }
