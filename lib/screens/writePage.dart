@@ -2,11 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-<<<<<<< HEAD
 import 'package:cloud_firestore/cloud_firestore.dart';
-=======
 import 'package:memo_re/utils/vars.dart';
->>>>>>> c7e1c4aa2730f61564b76e5622ac29fe79fdd197
 import 'package:provider/provider.dart';
 import 'package:memo_re/providers/postProvider.dart';
 import 'package:http/http.dart' as http;
@@ -62,34 +59,33 @@ class _WritePageState extends State<WritePage> {
             ),
             TextButton(
               child: Text('확인'),
-<<<<<<< HEAD
               onPressed: () {
                 print('입력된 텍스트: ${_textController.text}');
-=======
-              onPressed: () async {
-                final inputText = _textController.text;
-                print('입력된 텍스트: $inputText');
->>>>>>> c7e1c4aa2730f61564b76e5622ac29fe79fdd197
-                Navigator.of(context).pop();
+                () async {
+                  final inputText = _textController.text;
+                  print('입력된 텍스트: $inputText');
+                  Navigator.of(context).pop();
 
-                // 서버로 데이터를 전송
-                final response = await http.post(
-                Uri.parse('SERVER_URL'), // 추후 플라스크 서버 URL 입력
-                body: {'text': inputText}, // POST 요청으로 보낼 데이터
-                );
+                  // 서버로 데이터를 전송
+                  final response = await http.post(
+                    Uri.parse('SERVER_URL'), // 추후 플라스크 서버 URL 입력
+                    body: {'text': inputText}, // POST 요청으로 보낼 데이터
+                  );
 
-                if (response.statusCode == 200) {
-                print('데이터 전송 성공: ${response.body}');
-                } else {
-                  print('데이터 전송 실패: ${response.statusCode}');
-                }
-              },
-            ),
+                  if (response.statusCode == 200) {
+                    print('데이터 전송 성공: ${response.body}');
+                  } else {
+                    print('데이터 전송 실패: ${response.statusCode}');
+                  }
+                };
+              }
+            )
           ],
         );
       },
     );
   }
+
 
   // 파일을 Firebase에 업로드하는 함수
   Future<void> _uploadFile() async {
@@ -142,38 +138,26 @@ class _WritePageState extends State<WritePage> {
             _image == null ? Text('No image selected.') : Image.file(_image!),
             SizedBox(height: 20),
             ElevatedButton(
-<<<<<<< HEAD
               onPressed: _getImage,
-=======
-              onPressed: getImage,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.amber[800],
               ),
->>>>>>> c7e1c4aa2730f61564b76e5622ac29fe79fdd197
               child: Text('Pick Image from Gallery'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
-<<<<<<< HEAD
               onPressed: _getText,
-=======
-              onPressed: getText,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.amber[800],
               ),
->>>>>>> c7e1c4aa2730f61564b76e5622ac29fe79fdd197
               child: Text('Enter Text'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
-<<<<<<< HEAD
               onPressed: _uploadFile,
-=======
-              onPressed: uploadFile,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.amber[800],
               ),
->>>>>>> c7e1c4aa2730f61564b76e5622ac29fe79fdd197
               child: Text('Upload to Firebase'),
             ),
           ],
