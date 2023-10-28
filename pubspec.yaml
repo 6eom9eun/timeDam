@@ -48,6 +48,7 @@ dependencies:
   permission_handler: ^10.3.0
   table_calendar: ^3.0.9
   intl: ^0.18.1
+  dart_openai: ^4.0.0
 
 
 
