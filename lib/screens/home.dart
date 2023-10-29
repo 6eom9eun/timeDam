@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:memo_re/screens/writePage.dart';
+import 'package:provider/provider.dart';
+import 'package:memo_re/providers/loginProvider.dart';
 import 'package:memo_re/widgets/postbox_widget.dart';
-
-final firestore = FirebaseFirestore.instance;
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -25,25 +25,36 @@ class _HomeState extends State<Home> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                // 프로필 사진 보여주는 CircleAvatar
-                CircleAvatar(
-                  backgroundImage: AssetImage('assets/profile_image.png'),
-                  radius: 35, // 반지름 설정
-                  backgroundColor: Colors.transparent,
-                ),
-                Text(
-                  'user name',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-                Text(
-                  'remind your memory',
-                  style: TextStyle(
-                    color: Color(0xFFAAAAAA),
-                    fontSize: 12,
-                  ),
+                Consumer<LoginProvider>(
+                  builder: (context, provider, child) {
+                    if (provider.userInformation != null) {
+                      return Column(
+                        children: [
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(provider.userInformation!.profileUrl),
+                            radius: 35,
+                            backgroundColor: Colors.transparent,
+                          ),
+                          Text(
+                            provider.userInformation!.name,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          Text(
+                            'remind your memory',
+                            style: TextStyle(
+                              color: Color(0xFFAAAAAA),
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return CircularProgressIndicator(); // 로딩 인디케이터
+                    }
+                  },
                 ),
                 SizedBox(height: 15),
                 buildGrid(20), // postbox_widget

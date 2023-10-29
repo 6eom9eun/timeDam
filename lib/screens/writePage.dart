@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:memo_re/utils/vars.dart';
 import 'package:provider/provider.dart';
@@ -113,8 +115,23 @@ class _WritePageState extends State<WritePage> {
       await ref.putFile(_image!);
       final url = await ref.getDownloadURL();
 
+      // 현재 로그인한 사용자의 UID 가져오기
+      final uid = FirebaseAuth.instance.currentUser?.uid;
+      if (uid == null) { // 회원 아니면 X
+        print('Error: User is not logged in');
+        return;
+      }
+
+      // Firestore에 게시물 정보들을 저장
+      await FirebaseFirestore.instance.collection('posts').add({
+        'imageUrl': url,
+        'uid': uid,
+        'text': _textController.text,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
       Provider.of<PostProvider>(context, listen: false).imageUrl = url;
-      print('File uploaded to Firebase Storage! URL: $url');
+      print('File uploaded to Firebase Storage and Firestore! URL: $url, UID: $uid');
     } catch (e) {
       print('uploadFile error: $e');
     }
