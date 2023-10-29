@@ -10,4 +10,8 @@ class AppColors {
   static Color fontGreyColor() {
     return const Color(0xFFAAAAAA);
   }
+
+  static Color color1(){
+    return const Color(0xffFBE8B8);
+  }
 }

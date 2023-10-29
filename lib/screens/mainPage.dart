@@ -3,6 +3,7 @@ import 'package:memo_re/screens/home.dart';
 import 'package:memo_re/screens/memoryPage.dart';
 import 'package:memo_re/screens/myPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:memo_re/widgets/appDrawer.dart';
 import 'package:memo_re/utils/vars.dart';
 
 class MainPage extends StatefulWidget {
@@ -17,7 +18,7 @@ class _MainPageState extends State<MainPage> {
   List<BottomNavigationBarItem> bottomItems = [
     BottomNavigationBarItem(
       label: '홈',
-      icon: Icon(Icons.home_filled, size: 30.0,),
+      icon: Icon(Icons.home_filled, size: 30.0),
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.library_books_rounded),
@@ -25,11 +26,11 @@ class _MainPageState extends State<MainPage> {
     ),
     BottomNavigationBarItem(
       label: '내 페이지',
-      icon: Icon(Icons.account_circle, size: 30.0,),
+      icon: Icon(Icons.account_circle, size: 30.0),
     ),
   ];
 
-  List pages = [
+  List<Widget> pages = [
     Home(),
     MemoryPage(),
     MyPage(),
@@ -39,11 +40,11 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: AppColors.primaryColor(), // 앱바의 색상 설정
+        //automaticallyImplyLeading: false,  // 이 부분을 주석 처리하거나 삭제합니다.
+        backgroundColor: AppColors.primaryColor(),
         title: Text(
           '메모:re',
-          style: TextStyle(fontFamily:'Gugi',fontSize: 35.0),  // 이 부분에서 fontSize를 조절합니다.
+          style: TextStyle(fontFamily: 'Gugi', fontSize: 35.0),
         ),
         centerTitle: true,
         actions: [
@@ -55,6 +56,7 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
       ),
+      drawer: AppDrawer(),
       bottomNavigationBar: Container(
         height: 80.0,
         decoration: BoxDecoration(
@@ -62,7 +64,7 @@ class _MainPageState extends State<MainPage> {
             topLeft: Radius.circular(30.0),
             topRight: Radius.circular(30.0),
           ),
-          boxShadow: [ // 선택적: 그림자 효과 추가
+          boxShadow: [
             BoxShadow(
               color: Colors.black12,
               spreadRadius: 0,
@@ -70,24 +72,24 @@ class _MainPageState extends State<MainPage> {
             ),
           ],
         ),
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: AppColors.primaryColor(),
-            selectedItemColor: Colors.white,
-            unselectedItemColor: Colors.grey.withOpacity(.60),
-            selectedFontSize: 14,
-            unselectedFontSize: 10,
-            currentIndex: _selectedIndex,
-            showUnselectedLabels: false,
-            showSelectedLabels: false,
-            onTap: (int index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            items: bottomItems,
-          ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: AppColors.primaryColor(),
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.grey.withOpacity(.60),
+          selectedFontSize: 14,
+          unselectedFontSize: 10,
+          currentIndex: _selectedIndex,
+          showUnselectedLabels: false,
+          showSelectedLabels: false,
+          onTap: (int index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          items: bottomItems,
         ),
+      ),
       body: pages[_selectedIndex],
     );
   }

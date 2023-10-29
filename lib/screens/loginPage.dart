@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:memo_re/providers/loginProvider.dart';
+import 'package:memo_re/utils//vars.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -37,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
             false;
       },
       child: Scaffold(
+        backgroundColor: AppColors.color1(),
         body: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -47,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                 width: 300,
                 height: 300,
               ),
-              const SizedBox(height: 10.0),
+              const SizedBox(height: 3.0),
               OutlinedButton.icon(
                 onPressed: () async {
                   try {
@@ -67,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                   backgroundColor: Colors.white,
                 ),
                 label: const Text(
-                  "Google로 로그인 하기",
+                  "Google 로그인",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -94,8 +96,9 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
                 style: OutlinedButton.styleFrom(
-                  primary: Color(0xFFAAAAAA), // 텍스트 색상
+                  primary: AppColors.fontGreyColor(), // 텍스트 색상
                   side: BorderSide(color: Color(0xFFAAAAAA), width: 2.0), // 외곽선 색상과 두께
+                  backgroundColor: Colors.white,
                 ),
                 child: const Text('익명 로그인',
                   style: TextStyle(
