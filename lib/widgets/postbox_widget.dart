@@ -1,25 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-Widget buildBox(Color color) {
-  return Container(
-    color: color,
-    height: 100, // 박스 높이 조정
-    width: double.infinity, // 가로로 확장
-  );
-}
+Widget buildGrid() {
+  User? user = FirebaseAuth.instance.currentUser;
 
-Widget buildGrid(int count) {
-  List<Widget> boxes = List.generate(
-    count,
-        (index) => buildBox(index % 2 == 0 ? Colors.grey : Colors.deepOrangeAccent),
-  );
+  if (user == null) {
+    return Center(child: Text('로그인을 해주세요.'));
+  }
 
-  return GridView.count(
-    physics: NeverScrollableScrollPhysics(), // 그리드뷰 자체의 스크롤을 비활성화
-    crossAxisCount: 2, // 가로로 2개씩 정렬
-    crossAxisSpacing: 10.0, // 가로 간격 설정
-    mainAxisSpacing: 10.0, // 세로 간격 설정
-    shrinkWrap: true, // 그리드 크기를 그리드 내용에 맞게 자동 조정
-    children: boxes,
+  String userId = user.uid;
+
+  return StreamBuilder<QuerySnapshot>(
+    stream: FirebaseFirestore.instance
+        .collection('posts')
+        .where('uid', isEqualTo: userId)
+        .snapshots(),
+    builder: (context, snapshot) {
+      if (snapshot.hasError) {
+        return Center(child: Text('오류가 발생했습니다.'));
+      }
+
+      if (!snapshot.hasData) {
+        return Center(child: CircularProgressIndicator());
+      }
+
+      var posts = snapshot.data!.docs;
+
+      if (posts.isEmpty) {
+        return Center(child: Text('게시물이 없습니다.'));
+      }
+
+      return GridView.builder(
+        itemCount: posts.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 10.0,
+        ),
+        itemBuilder: (context, index) {
+          var post = posts[index];
+          if (post['imageUrl'] == null) {
+            return Center(child: Text('이미지를 불러올 수 없습니다.'));
+          }
+          return Image.network(post['imageUrl'], fit: BoxFit.cover);
+        },
+        shrinkWrap: true,
+        physics: ClampingScrollPhysics(),
+      );
+    },
   );
 }

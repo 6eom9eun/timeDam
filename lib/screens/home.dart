@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:memo_re/widgets/postbox_widget.dart';
 import 'package:memo_re/screens/writePage.dart';
 import 'package:provider/provider.dart';
 import 'package:memo_re/providers/loginProvider.dart';
-import 'package:memo_re/widgets/postbox_widget.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -52,12 +51,12 @@ class _HomeState extends State<Home> {
                         ],
                       );
                     } else {
-                      return CircularProgressIndicator(); // 로딩 인디케이터
+                      return CircularProgressIndicator();
                     }
                   },
                 ),
                 SizedBox(height: 15),
-                buildGrid(20), // postbox_widget
+                buildGrid(),
               ],
             ),
           ),
@@ -67,13 +66,13 @@ class _HomeState extends State<Home> {
         onPressed: () {
           Navigator.push(
             context,
-            CupertinoPageRoute(builder: (context) => WritePage()),
+            MaterialPageRoute(builder: (context) => WritePage()),
           );
         },
-        child: Icon(Icons.create, size: 35), // 아이콘 크기 조정
+        child: Icon(Icons.create, size: 35),
         backgroundColor: Colors.amber[800],
-        elevation: 10, // 그림자 강도
-        highlightElevation: 15, // 버튼을 눌렀을 때 그림자 강도
+        elevation: 10,
+        highlightElevation: 15,
       ),
     );
   }
