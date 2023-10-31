@@ -11,8 +11,7 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           Container(
-            width: 20,
-            height: 210,
+            height: 200,
             child: DrawerHeader(
               decoration: BoxDecoration(
               ),
@@ -63,51 +62,85 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.home),
-            title: Text('설정'),
+            leading: Icon(Icons.account_circle_outlined),
+            title: Text(
+              '계정 관리',
+              style: TextStyle(fontSize: 18),
+            ),
             onTap: () {
               Navigator.pop(context);
             },
           ),
           Divider(
             color: Colors.grey.shade300,
-            thickness: 1,
+            thickness: 3,
             indent: 20,
             endIndent: 20,
           ),
           ListTile(
-            leading: Icon(Icons.account_circle),
-            title: Text('계정 관리'),
+            leading: Icon(Icons.settings_outlined),
+            title: Text(
+              '설정',
+              style: TextStyle(fontSize: 18),
+            ),
             onTap: () {
               Navigator.pop(context);
             },
           ),
           Divider(
             color: Colors.grey.shade300,
-            thickness: 1,
+            thickness: 3,
             indent: 20,
             endIndent: 20,
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('정보'),
+            leading: Icon(Icons.description_outlined),
+            title: Text(
+              '이용약관',
+              style: TextStyle(fontSize: 18),
+            ),
             onTap: () {
               Navigator.pop(context);
             },
           ),
           Divider(
             color: Colors.grey.shade300,
-            thickness: 1,
+            thickness: 3,
+            indent: 20,
+            endIndent: 20,
+          ),
+          ListTile(
+            leading: Icon(Icons.mail_outline),
+            title: Text(
+              '문의하기',
+              style: TextStyle(fontSize: 18),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          Divider(
+            color: Colors.grey.shade300,
+            thickness: 3,
             indent: 20,
             endIndent: 20,
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
-            title: Text('로그아웃'),
+            title: Text(
+              '로그아웃',
+              style: TextStyle(fontSize: 18),
+            ),
             onTap: () {
               Provider.of<LoginProvider>(context, listen: false).signOut();
               Navigator.pop(context);
             },
+          ),
+          Divider(
+            color: Colors.grey.shade300,
+            thickness: 3,
+            indent: 20,
+            endIndent: 20,
           ),
         ],
       ),
