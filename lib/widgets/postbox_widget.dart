@@ -40,10 +40,23 @@ Widget buildGrid() {
         ),
         itemBuilder: (context, index) {
           var post = posts[index];
-          if (post['imageUrl'] == null) {
+          var imageUrl = post['imageUrl'];
+
+          if (imageUrl == null) {
             return Center(child: Text('이미지를 불러올 수 없습니다.'));
           }
-          return Image.network(post['imageUrl'], fit: BoxFit.cover);
+
+          return Image.network(
+            imageUrl,
+            fit: BoxFit.cover,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return Center(child: CircularProgressIndicator());
+            },
+            errorBuilder: (context, error, stackTrace) {
+              return SizedBox.shrink();
+            },
+          );
         },
         shrinkWrap: true,
         physics: ClampingScrollPhysics(),

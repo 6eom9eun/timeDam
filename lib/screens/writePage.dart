@@ -63,7 +63,7 @@ class _WritePageState extends State<WritePage> {
 
                 // 서버로 데이터를 전송
                 final response = await http.post(
-                Uri.parse('http://192.168.123.108:5000'), // 추후 플라스크 서버 URL 입력
+                Uri.parse('http://192.168.123.107:5000'), // 추후 플라스크 서버 URL 입력
                 body: {'text': inputText}, // POST 요청으로 보낼 데이터
                 );
 
@@ -160,7 +160,7 @@ class _WritePageState extends State<WritePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _image == null
-                ? Text('no image')
+                ? Text('이미지를 업로드 해주세요.')
                 : Image.file(_image!),
             SizedBox(height: 20),
             ElevatedButton(
@@ -168,7 +168,7 @@ class _WritePageState extends State<WritePage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.amber[800],
               ),
-              child: Text('Pick Image from Gallery'),
+              child: Text('이미지 고르기'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
@@ -176,7 +176,7 @@ class _WritePageState extends State<WritePage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.amber[800],
               ),
-              child: Text('Enter Text'),
+              child: Text('텍스트 입력'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
@@ -184,7 +184,7 @@ class _WritePageState extends State<WritePage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.amber[800],
               ),
-              child: Text('Upload to Firebase'),
+              child: Text('업로드'),
             ),
           ],
         ),
