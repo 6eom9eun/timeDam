@@ -16,7 +16,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.yellow[50],
+      backgroundColor: Color(0xFFEEEEEE),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
@@ -70,7 +70,7 @@ class _HomeState extends State<Home> {
           );
         },
         child: Icon(Icons.create, size: 35),
-        backgroundColor: Colors.amber[800],
+        backgroundColor: Color(0xFFFFCF52),
         elevation: 10,
         highlightElevation: 15,
       ),

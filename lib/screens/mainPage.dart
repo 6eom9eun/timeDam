@@ -41,7 +41,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       appBar: AppBar(
         //automaticallyImplyLeading: false,  // 이 부분을 주석 처리하거나 삭제합니다.
-        backgroundColor: AppColors.primaryColor(),
+        backgroundColor: Color(0xFFFFCF52),
         title: Text(
           '메모:re',
           style: TextStyle(fontFamily: 'Gugi', fontSize: 35.0),
@@ -74,7 +74,7 @@ class _MainPageState extends State<MainPage> {
         ),
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          backgroundColor: AppColors.primaryColor(),
+          backgroundColor: Color(0xFFFFCF52),
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.grey.withOpacity(.60),
           selectedFontSize: 14,

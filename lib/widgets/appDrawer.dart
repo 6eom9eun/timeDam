@@ -6,6 +6,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Color(0xFFEEEEEE),
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -68,7 +69,11 @@ class AppDrawer extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
-          Divider(color: Colors.black
+          Divider(
+            color: Colors.grey.shade300,
+            thickness: 1,
+            indent: 20,
+            endIndent: 20,
           ),
           ListTile(
             leading: Icon(Icons.account_circle),
@@ -77,7 +82,11 @@ class AppDrawer extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
-          Divider(color: Colors.black
+          Divider(
+            color: Colors.grey.shade300,
+            thickness: 1,
+            indent: 20,
+            endIndent: 20,
           ),
           ListTile(
             leading: Icon(Icons.settings),
@@ -87,7 +96,10 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           Divider(
-            color: Colors.black,
+            color: Colors.grey.shade300,
+            thickness: 1,
+            indent: 20,
+            endIndent: 20,
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),

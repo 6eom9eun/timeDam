@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
             false;
       },
       child: Scaffold(
-        backgroundColor: AppColors.color1(),
+        backgroundColor: AppColors.backColor(),
         body: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

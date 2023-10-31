@@ -140,7 +140,6 @@ class _WritePageState extends State<WritePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.yellow[50],
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor(), // 앱바의 색상 설정
         title: Text(
