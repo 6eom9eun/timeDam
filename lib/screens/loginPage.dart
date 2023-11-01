@@ -43,11 +43,11 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 200.0),
+              const SizedBox(height: 100.0),
               Image.asset(
                 "assets/main_logo.png",
                 width: 500,
-                height: 350,
+                height: 400,
               ),
               const Text(
                 "MEMO:re", // "memore" 텍스트 추가
@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 2.0,
                 ),
               ),
-              const SizedBox(height: 3.0),
+              const SizedBox(height: 70.0),
               OutlinedButton.icon(
                 onPressed: () async {
                   try {
