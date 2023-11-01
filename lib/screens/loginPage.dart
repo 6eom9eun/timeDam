@@ -46,8 +46,18 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 200.0),
               Image.asset(
                 "assets/main_logo.png",
-                width: 300,
-                height: 300,
+                width: 500,
+                height: 350,
+              ),
+              const Text(
+                "MEMO:re", // "memore" 텍스트 추가
+                style: TextStyle(
+                  fontFamily: 'Gugi',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 60,
+                  color: Color(0xFF333333),
+                  height: 2.0,
+                ),
               ),
               const SizedBox(height: 3.0),
               OutlinedButton.icon(
@@ -64,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(width: 2, color: Color(0xFFAAAAAA)),
+                  side: const BorderSide(width: 2, color: Color(0xFF333333)),
                   fixedSize: const Size(300, 55),
                   backgroundColor: Colors.white,
                 ),
@@ -73,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
-                    color: Color(0xFFAAAAAA),
+                    color: Color(0xFF333333),
                   ),
                 ),
                 icon: Image.asset(
@@ -97,13 +107,14 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 style: OutlinedButton.styleFrom(
                   primary: AppColors.fontGreyColor(), // 텍스트 색상
-                  side: BorderSide(color: Color(0xFFAAAAAA), width: 2.0), // 외곽선 색상과 두께
+                  side: BorderSide(color: Color(0xFF333333), width: 2.0), // 외곽선 색상과 두께
                   backgroundColor: Colors.white,
                 ),
                 child: const Text('익명 로그인',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
+                    color: Color(0xFF333333),
                   ),
                 ),
               ),

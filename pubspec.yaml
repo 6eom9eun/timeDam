@@ -106,6 +106,28 @@ flutter:
         - asset: assets/fonts/Noto_Sans_KR/NotoSansKR-Black.otf
           weight: 900
 
+    - family: S_Core
+      fonts:
+        - asset: assets/fonts/S-Core_Dream_OTF/SCDream1.otf
+          weight: 100
+        - asset: assets/fonts/S-Core_Dream_OTF/SCDream2.otf
+          weight: 200
+        - asset: assets/fonts/S-Core_Dream_OTF/SCDream3.otf
+          weight: 300
+        - asset: assets/fonts/S-Core_Dream_OTF/SCDream4.otf
+          weight: 400
+        - asset: assets/fonts/S-Core_Dream_OTF/SCDream5.otf
+          weight: 500
+        - asset: assets/fonts/S-Core_Dream_OTF/SCDream6.otf
+          weight: 600
+        - asset: assets/fonts/S-Core_Dream_OTF/SCDream7.otf
+          weight: 700
+        - asset: assets/fonts/S-Core_Dream_OTF/SCDream8.otf
+          weight: 800
+        - asset: assets/fonts/S-Core_Dream_OTF/SCDream9.otf
+          weight: 900
+
+
     - family: Gugi
       fonts:
         - asset: assets/fonts/GuGi_KR/Gugi-Regular.ttf
