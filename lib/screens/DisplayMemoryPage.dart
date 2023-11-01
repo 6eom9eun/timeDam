@@ -15,8 +15,13 @@ class DisplayMemoryPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor(), // 앱바의 색상 설정
         title: Text(
-          '생성된 추억',
-          style: TextStyle(fontFamily:'Gugi',fontSize: 35.0),
+          '추억 생성 완료!',
+          style: TextStyle(
+              fontFamily:'Noto_Sans_KR',
+              fontWeight: FontWeight.bold,
+              fontSize: 32.0,
+              color: Colors.black,
+          ),
         ),
         centerTitle: true,
         leading: IconButton(
@@ -32,14 +37,17 @@ class DisplayMemoryPage extends StatelessWidget {
           children: [
             Image.network(imageUrl),
             SizedBox(height: 15),
-            Text(
-              memory,
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20), // 좌우 여백 조절
+              child: Text(
+                memory,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontFamily: 'S-Core',
+                  // fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
-              textAlign: TextAlign.center,
             ),
           ],
         ),
