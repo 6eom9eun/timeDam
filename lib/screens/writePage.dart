@@ -63,7 +63,7 @@ class _WritePageState extends State<WritePage> {
 
                 // 서버로 데이터를 전송
                 final response = await http.post(
-                  Uri.parse('http://192.168.123.107:5000'), // 추후 플라스크 서버 URL 입력
+                  Uri.parse('http://192.168.123.108:5000'), // 추후 플라스크 서버 URL 입력
                   body: {'text': inputText}, // POST 요청으로 보낼 데이터
                 );
 
