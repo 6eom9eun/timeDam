@@ -39,22 +39,14 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        //automaticallyImplyLeading: false,  // 이 부분을 주석 처리하거나 삭제합니다.
-        backgroundColor: Color(0xFFFFCF52),
-        title: Text(
-          '메모:re',
-          style: TextStyle(fontFamily: 'Gugi', fontSize: 35.0),
-        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async => await FirebaseAuth.instance
-                .signOut()
-                .then((_) => Navigator.pushNamed(context, "/login")),
-          ),
-        ],
+        iconTheme: IconThemeData(
+          color: Colors.black, // Drawer 아이콘과 다른 앱바 아이콘의 색상을 검정색으로 설정
+        ),
       ),
       drawer: AppDrawer(),
       bottomNavigationBar: Container(

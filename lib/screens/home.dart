@@ -29,6 +29,7 @@ class _HomeState extends State<Home> {
                     if (provider.userInformation != null) {
                       return Column(
                         children: [
+                          SizedBox(height: 80),
                           CircleAvatar(
                             backgroundImage: NetworkImage(provider.userInformation!.profileUrl),
                             radius: 35,
@@ -65,8 +66,10 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => WritePage()),
+              context,
+              CupertinoPageRoute(
+              builder: (context) => WritePage(),
+              ),
           );
         },
         child: Icon(Icons.create, size: 35),

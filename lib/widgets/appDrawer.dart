@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:memo_re/providers/loginProvider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -126,14 +127,14 @@ class AppDrawer extends StatelessWidget {
             endIndent: 20,
           ),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
+            leading: Icon(Icons.exit_to_app, color: Colors.black),
             title: Text(
               '로그아웃',
               style: TextStyle(fontSize: 18),
             ),
-            onTap: () {
-              Provider.of<LoginProvider>(context, listen: false).signOut();
-              Navigator.pop(context);
+            onTap: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.pushNamed(context, "/login");
             },
           ),
           Divider(

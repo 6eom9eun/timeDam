@@ -63,8 +63,8 @@ class _WritePageState extends State<WritePage> {
 
                 // 서버로 데이터를 전송
                 final response = await http.post(
-                Uri.parse('http://192.168.123.107:5000'), // 추후 플라스크 서버 URL 입력
-                body: {'text': inputText}, // POST 요청으로 보낼 데이터
+                  Uri.parse('http://192.168.123.107:5000'), // 추후 플라스크 서버 URL 입력
+                  body: {'text': inputText}, // POST 요청으로 보낼 데이터
                 );
 
                 if (response.statusCode == 200) {
@@ -76,10 +76,11 @@ class _WritePageState extends State<WritePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DisplayMemoryPage(
-                        memory: generatedMemory,
-                        imageUrl: image_url,
-                      ),
+                      builder: (context) =>
+                          DisplayMemoryPage(
+                            memory: generatedMemory,
+                            imageUrl: image_url,
+                          ),
                     ),
                   );
                 } else {
@@ -107,7 +108,10 @@ class _WritePageState extends State<WritePage> {
 
   Future uploadFile() async {
     if (_image == null) return;
-    final fileName = _image!.path.split('/').last;
+    final fileName = _image!
+        .path
+        .split('/')
+        .last;
     final destination = 'images/$fileName';
 
     try {
@@ -130,8 +134,11 @@ class _WritePageState extends State<WritePage> {
         'createdAt': FieldValue.serverTimestamp(),
       });
 
-      Provider.of<PostProvider>(context, listen: false).imageUrl = url;
-      print('File uploaded to Firebase Storage and Firestore! URL: $url, UID: $uid');
+      Provider
+          .of<PostProvider>(context, listen: false)
+          .imageUrl = url;
+      print(
+          'File uploaded to Firebase Storage and Firestore! URL: $url, UID: $uid');
     } catch (e) {
       print('uploadFile error: $e');
     }
@@ -140,52 +147,104 @@ class _WritePageState extends State<WritePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.primaryColor(), // 앱바의 색상 설정
-        title: Text(
-          '메모:re',
-          style: TextStyle(fontFamily:'Gugi',fontSize: 35.0),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.close),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(260.0), // 앱바의 높이
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.close),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              color: Color(0xFFFFCF52), // 앱바의 배경 색상 설정
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(220), // 앱바의 하단 모서리를 둥글게 설정
+              ),
+            ),
+            child: Align(
+              alignment: Alignment(-0.8, 0),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 80),
+                    Text(
+                      '당신의 추억은\n무엇인가요?',
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      '저희에게 추억을 알려주세요 !',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _image == null
-                ? Text('이미지를 업로드 해주세요.')
-                : Image.file(_image!),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: getImage,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.amber[800],
-              ),
-              child: Text('이미지 고르기'),
+        child: Align(
+          alignment: Alignment(0, -0.8),
+          child: Container(
+            padding: EdgeInsets.all(30),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3),
+                ),
+              ],
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: getText,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.amber[800],
-              ),
-              child: Text('텍스트 입력'),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _image == null
+                    ? Text('이미지를 업로드 해주세요.')
+                    : Image.file(_image!),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: getImage,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber[800],
+                  ),
+                  child: Text('이미지 고르기'),
+                ),
+                ElevatedButton(
+                  onPressed: getText,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber[800],
+                  ),
+                  child: Text('텍스트 입력'),
+                ),
+                ElevatedButton(
+                  onPressed: uploadFile,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber[800],
+                  ),
+                  child: Text('업로드'),
+
+                ),
+              ],
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: uploadFile,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.amber[800],
-              ),
-              child: Text('업로드'),
-            ),
-          ],
+          ),
         ),
       ),
     );
