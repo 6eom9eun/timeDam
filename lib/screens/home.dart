@@ -16,7 +16,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEEEEEE),
+      backgroundColor: Color(0xFFFFFFFF),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(

@@ -8,7 +8,7 @@ class AppColors {
   }
 
   static Color backColor(){
-    return const Color(0xFFEEEEEE);
+    return const Color(0xfffffadd);
   }
 
   static Color fontGreyColor() {
