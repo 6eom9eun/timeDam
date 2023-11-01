@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:memo_re/providers/loginProvider.dart';
 import 'package:memo_re/utils//vars.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:memo_re/screens/landingPage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -48,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
               Image.asset(
                 "assets/main_logo.png",
                 width: 500,
-                height: 400,
+                height: 300,
               ),
               const Text(
                 "MEMO:re", // "memore" 텍스트 추가
@@ -60,9 +61,10 @@ class _LoginPageState extends State<LoginPage> {
                   height: 2.0,
                 ),
               ),
-              const SizedBox(height: 70.0),
+              const SizedBox(height: 30.0),
               OutlinedButton.icon(
                 onPressed: () async {
+                  Navigator.push(context, CupertinoPageRoute(builder: (context) => LandingPage()));
                   try {
                     await loginProvider.signInWithGoogle(); // 구글 로그인
                     print("구글 로그인 성공");
@@ -95,6 +97,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               OutlinedButton(
                 onPressed: () async {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => LandingPage()));
                   try {
                     await loginProvider.signInWithAnonymous(); // 익명 로그인
                     print("Anonymous Login Success!!");
