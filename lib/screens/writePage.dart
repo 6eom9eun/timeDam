@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:memo_re/providers/postProvider.dart';
 import 'package:http/http.dart' as http;
 import 'DisplayMemoryPage.dart';
+import 'package:memo_re/screens/CreatingPage.dart';
 
 // 게시물 올리기, 추억 생성
 String generatedMemory = "";
@@ -35,8 +36,9 @@ class _WritePageState extends State<WritePage> {
   final picker = ImagePicker();
   TextEditingController _textController = TextEditingController();
 
+
   Future getText() async {
-    return showDialog(
+    showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -59,9 +61,18 @@ class _WritePageState extends State<WritePage> {
               onPressed: () async {
                 final inputText = _textController.text;
                 print('입력된 텍스트: $inputText');
-                // Navigator.of(context).pop();
+                Navigator.of(context).pop();
 
-                // 서버로 데이터를 전송
+                // LandingPage로 이동하여 로딩 화면을 표시
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CreatingPage(),
+                    fullscreenDialog: true, // 전체 화면 다이얼로그로 엽니다.
+                  ),
+                );
+
+                // 서버로 데이터를 전송하고 응답을 기다립니다.
                 final response = await http.post(
                   Uri.parse('http://192.168.123.108:5000'), // 추후 플라스크 서버 URL 입력
                   body: {'text': inputText}, // POST 요청으로 보낼 데이터
@@ -72,7 +83,8 @@ class _WritePageState extends State<WritePage> {
                   generatedMemory = data['memory'];
                   image_url = data['image_url'];
 
-                  // DisplayMemoryPage를 호출하여 이미지와 텍스트를 표시
+                  // 데이터를 성공적으로 받아온 후 DisplayMemoryPage로 이동
+                  Navigator.of(context).pop(); // 로딩 화면 닫기
                   Navigator.push(
                     context,
                     MaterialPageRoute(

@@ -45,11 +45,11 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 100.0),
+              const SizedBox(height: 90.0),
               Image.asset(
                 "assets/main_logo.png",
                 width: 500,
-                height: 300,
+                height: 400,
               ),
               const Text(
                 "MEMO:re", // "memore" 텍스트 추가
