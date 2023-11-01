@@ -148,7 +148,7 @@ class _WritePageState extends State<WritePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(260.0), // 앱바의 높이
+        preferredSize: Size.fromHeight(200.0), // 앱바의 높이
         child: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -163,17 +163,17 @@ class _WritePageState extends State<WritePage> {
             decoration: BoxDecoration(
               color: Color(0xFFFFCF52), // 앱바의 배경 색상 설정
               borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(220), // 앱바의 하단 모서리를 둥글게 설정
+                bottom: Radius.circular(150), // 앱바의 하단 모서리를 둥글게 설정
               ),
             ),
             child: Align(
-              alignment: Alignment(-0.8, 0),
+              alignment: Alignment(-0.6, 0),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 80),
+                    SizedBox(height: 70),
                     Text(
                       '당신의 추억은\n무엇인가요?',
                       style: TextStyle(
@@ -198,7 +198,7 @@ class _WritePageState extends State<WritePage> {
       ),
       body: Center(
         child: Align(
-          alignment: Alignment(0, -0.8),
+          alignment: Alignment.topCenter,
           child: Container(
             padding: EdgeInsets.all(30),
             decoration: BoxDecoration(
@@ -218,7 +218,14 @@ class _WritePageState extends State<WritePage> {
               children: [
                 _image == null
                     ? Text('이미지를 업로드 해주세요.')
-                    : Image.file(_image!),
+                    : Container(
+                  width: 200, // 원하는 너비로 설정
+                  height: 200, // 원하는 높이로 설정
+                  child: Image.file(
+                    _image!,
+                    fit: BoxFit.cover, // 이미지가 컨테이너를 채우도록 설정
+                  ),
+                ),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: getImage,

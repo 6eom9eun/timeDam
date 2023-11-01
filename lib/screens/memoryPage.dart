@@ -27,45 +27,11 @@ class _MemoryPageState extends State<MemoryPage> {
       body: Center(
         child: Column(
           children: [
+            SizedBox(height: 90),
             Calendar2(
               focusedDay: _focusedDay,
               selectedDay: _selectedDay,
               onDaySelected: _onDaySelected,
-            ),
-
-            // 이거 post 보여지는 거 위젯화 필요.
-            const SizedBox(height: 20),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Consumer<PostProvider>(
-                  builder: (context, postProvider, child) {
-                    return Column(
-                      children: [
-                        if (postProvider.imageUrl != null)
-                          Container(
-                            width: double.infinity,
-                            height: 200,
-                            child: Image.network(
-                              postProvider.imageUrl!,
-                              fit: BoxFit.fill,
-                            ),
-                          )
-                        else
-                          Text('No image selected.'),
-                        SizedBox(height: 20), // 이미지와 텍스트 사이의 간격
-                        if (postProvider.text != null && postProvider.text!.isNotEmpty)
-                          Text(
-                            postProvider.text!,
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          )
-                        else
-                          Text('No text available.')
-                      ],
-                    );
-                  },
-                ),
-              ),
             ),
           ],
         ),

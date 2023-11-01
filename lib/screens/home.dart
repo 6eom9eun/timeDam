@@ -32,23 +32,30 @@ class _HomeState extends State<Home> {
                           SizedBox(height: 80),
                           CircleAvatar(
                             backgroundImage: NetworkImage(provider.userInformation!.profileUrl),
-                            radius: 35,
+                            radius: 40,
                             backgroundColor: Colors.transparent,
                           ),
                           Text(
                             provider.userInformation!.name,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                              fontSize: 23,
                             ),
                           ),
                           Text(
                             'remind your memory',
                             style: TextStyle(
                               color: Color(0xFFAAAAAA),
-                              fontSize: 12,
+                              fontSize: 16,
                             ),
                           ),
+                          Container(
+                            padding: EdgeInsets.only(top: 0),
+                            child: Align(
+                              alignment: Alignment.topCenter,
+                              child: buildGrid(),
+                            ),
+                          )
                         ],
                       );
                     } else {
@@ -56,8 +63,6 @@ class _HomeState extends State<Home> {
                     }
                   },
                 ),
-                SizedBox(height: 15),
-                buildGrid(),
               ],
             ),
           ),

@@ -44,7 +44,7 @@ class AppDrawer extends StatelessWidget {
                             Text(
                               'remind your memory',
                               style: TextStyle(
-                                color: Colors.black.withOpacity(0.7),
+                                color: Color(0xFFAAAAAA),
                                 // Adjust opacity as needed
                                 fontSize: 13,
                               ),

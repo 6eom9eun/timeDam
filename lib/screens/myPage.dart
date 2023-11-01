@@ -27,6 +27,7 @@ class _MyPageState extends State<MyPage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            SizedBox(height: 90),
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
