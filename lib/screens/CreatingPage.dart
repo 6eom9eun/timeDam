@@ -6,6 +6,16 @@ class CreatingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: Icon(Icons.close),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+
       backgroundColor: Colors.yellow[50], // 배경색을 노란색으로 설정
       body: Center(
         child: Column(

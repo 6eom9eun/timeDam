@@ -61,7 +61,7 @@ class _WritePageState extends State<WritePage> {
               onPressed: () async {
                 final inputText = _textController.text;
                 print('입력된 텍스트: $inputText');
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
 
                 // LandingPage로 이동하여 로딩 화면을 표시
                 Navigator.push(
@@ -74,7 +74,7 @@ class _WritePageState extends State<WritePage> {
 
                 // 서버로 데이터를 전송하고 응답을 기다립니다.
                 final response = await http.post(
-                  Uri.parse('http://192.168.123.108:5000'), // 추후 플라스크 서버 URL 입력
+                  Uri.parse('http://192.168.123.113:5000'), // 추후 플라스크 서버 URL 입력
                   body: {'text': inputText}, // POST 요청으로 보낼 데이터
                 );
 

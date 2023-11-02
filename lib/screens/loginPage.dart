@@ -39,29 +39,33 @@ class _LoginPageState extends State<LoginPage> {
         )) ??
             false;
       },
+
       child: Scaffold(
         backgroundColor: AppColors.backColor(),
         body: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 90.0),
-              Image.asset(
-                "assets/main_logo.png",
-                width: 500,
-                height: 400,
-              ),
-              const Text(
-                "MEMO:re", // "memore" 텍스트 추가
-                style: TextStyle(
-                  fontFamily: 'Gugi',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 60,
-                  color: Color(0xFF333333),
-                  height: 2.0,
+              Transform.translate(
+                offset: Offset(0.0, 80.0),
+                child: Image.asset(
+                  "assets/main_logo.png",
+                  width: 500,
+                  height: 400,
                 ),
               ),
-              const SizedBox(height: 30.0),
+              Transform.translate(
+                offset: Offset(0.0, -30.0),
+                child: const Text(
+                  "메모:re", // "memore" 텍스트 추가
+                  style: TextStyle(
+                    fontFamily: 'GODO',
+                    fontSize: 130,
+                    color: Color(0xFF333333),
+                    height: 2.0,
+                  ),
+                ),
+              ),
               OutlinedButton.icon(
                 onPressed: () async {
                   Navigator.push(context, CupertinoPageRoute(builder: (context) => LandingPage()));
@@ -77,15 +81,15 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(width: 2, color: Color(0xFF333333)),
+                  side: const BorderSide(width: 2, color: Color(0xFFAAAAAA)),
                   fixedSize: const Size(300, 55),
                   backgroundColor: Colors.white,
                 ),
                 label: const Text(
                   "Google 로그인",
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontFamily: 'GODO',
+                    fontSize: 40,
                     color: Color(0xFF333333),
                   ),
                 ),
@@ -111,13 +115,13 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 style: OutlinedButton.styleFrom(
                   primary: AppColors.fontGreyColor(), // 텍스트 색상
-                  side: BorderSide(color: Color(0xFF333333), width: 2.0), // 외곽선 색상과 두께
+                  side: BorderSide(color: Color(0xFFAAAAAA), width: 2.0), // 외곽선 색상과 두께
                   backgroundColor: Colors.white,
                 ),
                 child: const Text('익명 로그인',
                   style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                    fontFamily: 'GODO',
                     color: Color(0xFF333333),
                   ),
                 ),

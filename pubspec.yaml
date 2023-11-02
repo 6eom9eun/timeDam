@@ -132,6 +132,10 @@ flutter:
       fonts:
         - asset: assets/fonts/GuGi_KR/Gugi-Regular.ttf
 
+    - family: GODO
+      fonts:
+        - asset: assets/fonts/GODO/godoMaum.ttf
+
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
