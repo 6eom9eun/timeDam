@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memo_re/screens/home.dart';
 import 'package:memo_re/screens/memoryPage.dart';
-import 'package:memo_re/screens/myPage.dart';
+import 'package:memo_re/screens/placePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:memo_re/widgets/appDrawer.dart';
 import 'package:memo_re/utils/vars.dart';
@@ -25,15 +25,15 @@ class _MainPageState extends State<MainPage> {
       label: '목록',
     ),
     BottomNavigationBarItem(
-      label: '내 페이지',
-      icon: Icon(Icons.account_circle, size: 30.0),
+      icon: Icon(Icons.library_books_rounded),
+      label: '장소',
     ),
   ];
 
   List<Widget> pages = [
     Home(),
     MemoryPage(),
-    MyPage(),
+    PlacePage(),
   ];
 
   @override

@@ -48,21 +48,57 @@ Widget buildGrid() {
             return Center(child: Text('이미지를 불러올 수 없습니다.'));
           }
 
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(20.0), // 모서리를 둥글게 만듭니다.
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Center(child: CircularProgressIndicator());
-              },
-              errorBuilder: (context, error, stackTrace) {
-                return SizedBox.shrink();
-              },
+          return GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  var postText = post['text']; // 컬렉션에서 텍스트 데이터를 가져옵니다.
+                  return AlertDialog(
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min, // Column의 크기를 내용물에 맞게 조절합니다.
+                      children: <Widget>[
+                        Image.network(
+                          imageUrl,
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(height: 10), // 이미지와 텍스트 사이에 간격을 추가합니다.
+                        Text(
+                          postText ?? '텍스트가 없습니다.', // postText가 null이면 대체 텍스트를 표시합니다.
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text('닫기'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0), // 모서리를 둥글게 만듭니다.
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(child: CircularProgressIndicator());
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return SizedBox.shrink();
+                },
+              ),
             ),
           );
         },
+
         shrinkWrap: true,
         physics: ClampingScrollPhysics(),
       );

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:memo_re/app.dart';
+import 'package:background_fetch/background_fetch.dart';
+import 'package:memo_re/providers/place_api.dart';
 
 // 상태 관리 : 프로바이더
 import 'package:provider/provider.dart';
@@ -15,6 +17,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
 
   runApp(
     MultiProvider(

@@ -28,8 +28,8 @@ class _Calendar2State extends State<Calendar2> {
       selectedDayPredicate: (day) => isSameDay(widget.selectedDay, day),
       firstDay: DateTime(2022, 1, 1),
       lastDay: DateTime(2023, 12, 31),
-      rowHeight: 50, // 더 높은 행으로 좀 더 공간을 제공합니다.
-      daysOfWeekHeight: 30, // 요일 표시 부분의 높이를 늘렸습니다.
+      rowHeight: 40, // 더 높은 행으로 좀 더 공간을 제공합니다.
+      daysOfWeekHeight: 20, // 요일 표시 부분의 높이를 늘렸습니다.
       headerVisible: true,
       headerStyle: HeaderStyle(
         titleCentered: true, // 제목을 중앙에 위치시킵니다.

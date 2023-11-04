@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
-import 'package:memo_re/providers/loginProvider.dart';
 import 'package:memo_re/utils//vars.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:memo_re/providers/loginProvider.dart';
 import 'package:memo_re/screens/landingPage.dart';
+import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -14,6 +15,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  Future<bool> permission() async {
+    Map<Permission, PermissionStatus> status =
+    await [Permission.location].request(); // [] 권한배열에 권한을 작성
+
+    if (await Permission.location.isGranted) {
+      return Future.value(true);
+    } else {
+      return Future.value(false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     LoginProvider loginProvider = Provider.of<LoginProvider>(context, listen: true);
@@ -68,16 +81,21 @@ class _LoginPageState extends State<LoginPage> {
               ),
               OutlinedButton.icon(
                 onPressed: () async {
-                  Navigator.push(context, CupertinoPageRoute(builder: (context) => LandingPage()));
-                  try {
-                    await loginProvider.signInWithGoogle(); // 구글 로그인
-                    print("구글 로그인 성공");
-                    if (!mounted) return; // 없을 때
-                    Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-                  } catch (e) {
-                    if (e is FirebaseAuthException) {
-                      print(e.message!);
+                  bool hasPermission = await permission(); // 위치 권한
+                  if (hasPermission) {
+                    try {
+                      await loginProvider.signInWithGoogle(); // google 로그인
+                      print("구글 로그인 성공");
+                      if (!mounted) return; // 위치 권한 X 일 때 에러
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/home', (route) => false);
+                    } catch (e) {
+                      if (e is FirebaseAuthException) {
+                        print(e.message!);
+                      }
                     }
+                  } else {
+                    print('위치 권한이 필요합니다.');
                   }
                 },
                 style: OutlinedButton.styleFrom(
@@ -101,16 +119,22 @@ class _LoginPageState extends State<LoginPage> {
               ),
               OutlinedButton(
                 onPressed: () async {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LandingPage()));
-                  try {
-                    await loginProvider.signInWithAnonymous(); // 익명 로그인
-                    print("Anonymous Login Success!!");
-                    if (!mounted) return; // 없을 때
-                    Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-                  } catch (e) {
-                    if (e is FirebaseAuthException) {
-                      print(e.message!);
+                  bool hasPermission = await permission(); // 위치 권한
+                  if (hasPermission) {
+                    try {
+                      await loginProvider.signInWithAnonymous(); // 익명 로그인
+                      print("익명 로그인 성공");
+                      // Navigator.pushNamed(context, '/home');
+                      if (!mounted) return; // 위치 권한 X 에러
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/home', (route) => false);
+                    } catch (e) {
+                      if (e is FirebaseAuthException) {
+                        print(e.message!);
+                      }
                     }
+                  } else {
+                    print("위치 권한이 필요합니다."); // 위치 권한이 없는 경우 처리
                   }
                 },
                 style: OutlinedButton.styleFrom(
