@@ -9,6 +9,7 @@ import 'package:memo_re/utils/vars.dart';
 import 'package:provider/provider.dart';
 import 'package:memo_re/providers/postProvider.dart';
 import 'package:http/http.dart' as http;
+import 'package:speech_to_text/speech_to_text.dart';
 import 'DisplayMemoryPage.dart';
 import 'package:memo_re/screens/CreatingPage.dart';
 
@@ -34,6 +35,7 @@ class WritePage extends StatefulWidget {
 class _WritePageState extends State<WritePage> {
   File? _image;
   final picker = ImagePicker();
+  final speech = SpeechToText();
   TextEditingController _textController = TextEditingController();
 
 
@@ -74,7 +76,7 @@ class _WritePageState extends State<WritePage> {
 
                 // 서버로 데이터를 전송하고 응답을 기다립니다.
                 final response = await http.post(
-                  Uri.parse('http://192.168.123.113:5000'), // 추후 플라스크 서버 URL 입력
+                  Uri.parse('http://192.168.123.104:5000'), // 추후 플라스크 서버 URL 입력
                   body: {'text': inputText}, // POST 요청으로 보낼 데이터
                 );
 
@@ -104,6 +106,27 @@ class _WritePageState extends State<WritePage> {
         );
       },
     );
+  }
+
+  Future<void> startListening() async {
+    if (!await speech.initialize()) {
+      // 음성 입력 초기화에 실패한 경우
+      return;
+    }
+
+    if (speech.isListening) {
+      // 이미 음성 입력 중인 경우
+      await speech.stop();
+    }
+
+    final result = await speech.listen();
+    if (result.finalResult != null) {
+      // 음성 입력이 성공적으로 완료된 경우
+      final inputText = result.finalResult;
+      // TODO: 음성 입력된 텍스트를 처리하고 저장합니다.
+      print('인식된 음성: $inputText'); // 음성 입력된 텍스트를 출력
+      _textController.text = inputText;
+    }
   }
 
   Future getImage() async {
@@ -247,24 +270,31 @@ class _WritePageState extends State<WritePage> {
                   child: Text('이미지 고르기'),
                 ),
                 ElevatedButton(
-                  onPressed: getText,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber[800],
-                  ),
-                  child: Text('텍스트 입력'),
-                ),
-                ElevatedButton(
                   onPressed: uploadFile,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amber[800],
                   ),
                   child: Text('업로드'),
-
+                ),
+                ElevatedButton(
+                  onPressed: getText,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber[800],
+                  ),
+                  child: Icon(Icons.keyboard),
+                ),
+                ElevatedButton(
+                  onPressed: startListening, // 음성 입력 함수 호출
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber[800],
+                  ),
+                  child: Icon(Icons.mic), // 음성 입력 버튼 추가
                 ),
               ],
             ),
           ),
         ),
+
       ),
     );
   }
