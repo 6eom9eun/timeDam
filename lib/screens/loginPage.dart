@@ -15,7 +15,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   Future<bool> permission() async {
     Map<Permission, PermissionStatus> status =
     await [Permission.location].request(); // [] 권한배열에 권한을 작성
@@ -52,109 +51,163 @@ class _LoginPageState extends State<LoginPage> {
         )) ??
             false;
       },
-
       child: Scaffold(
         backgroundColor: AppColors.backColor(),
-        body: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Transform.translate(
-                offset: Offset(0.0, 80.0),
-                child: Image.asset(
-                  "assets/main_logo.png",
-                  width: 500,
-                  height: 400,
-                ),
-              ),
-              Transform.translate(
-                offset: Offset(0.0, -30.0),
-                child: const Text(
-                  "메모:re", // "memore" 텍스트 추가
-                  style: TextStyle(
-                    fontFamily: 'GODO',
-                    fontSize: 130,
-                    color: Color(0xFF333333),
-                    height: 2.0,
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Transform.translate(
+                  offset: Offset(0.0, 30.0),
+                  child: Image.asset(
+                    "assets/main_logo.png",
+                    width: 500,
+                    height: 400,
                   ),
                 ),
-              ),
-              OutlinedButton.icon(
-                onPressed: () async {
-                  bool hasPermission = await permission(); // 위치 권한
-                  if (hasPermission) {
-                    try {
-                      await loginProvider.signInWithGoogle(); // google 로그인
-                      print("구글 로그인 성공");
-                      if (!mounted) return; // 위치 권한 X 일 때 에러
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/home', (route) => false);
-                    } catch (e) {
-                      if (e is FirebaseAuthException) {
-                        print(e.message!);
-                      }
-                    }
-                  } else {
-                    print('위치 권한이 필요합니다.');
-                  }
-                },
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(width: 2, color: Color(0xFFAAAAAA)),
-                  fixedSize: const Size(300, 55),
-                  backgroundColor: Colors.white,
-                ),
-                label: const Text(
-                  "Google 로그인",
-                  style: TextStyle(
-                    fontFamily: 'GODO',
-                    fontSize: 40,
-                    color: Color(0xFF333333),
+                Transform.translate(
+                  offset: Offset(0.0, -150.0),
+                  child: const Text(
+                    "기억담",
+                    style: TextStyle(
+                      fontFamily: 'GODO',
+                      fontSize: 130,
+                      color: Color(0xFF333333),
+                      height: 2.0,
+                    ),
                   ),
                 ),
-                icon: Image.asset(
-                  "assets/google.png",
-                  height: 30,
-                  width: 30,
-                ),
-              ),
-              OutlinedButton(
-                onPressed: () async {
-                  bool hasPermission = await permission(); // 위치 권한
-                  if (hasPermission) {
-                    try {
-                      await loginProvider.signInWithAnonymous(); // 익명 로그인
-                      print("익명 로그인 성공");
-                      // Navigator.pushNamed(context, '/home');
-                      if (!mounted) return; // 위치 권한 X 에러
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/home', (route) => false);
-                    } catch (e) {
-                      if (e is FirebaseAuthException) {
-                        print(e.message!);
-                      }
-                    }
-                  } else {
-                    print("위치 권한이 필요합니다."); // 위치 권한이 없는 경우 처리
-                  }
-                },
-                style: OutlinedButton.styleFrom(
-                  primary: AppColors.fontGreyColor(), // 텍스트 색상
-                  side: BorderSide(color: Color(0xFFAAAAAA), width: 2.0), // 외곽선 색상과 두께
-                  backgroundColor: Colors.white,
-                ),
-                child: const Text('익명 로그인',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontFamily: 'GODO',
-                    color: Color(0xFF333333),
+                Transform.translate(
+                  offset: Offset(0.0, -150.0),
+                  child: Container(
+                    width: 300,
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 2.0,
+                          ),
+                        ),
+                        labelText: 'ID',
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ],
+                Transform.translate(
+                  offset: Offset(0.0, -140.0),
+                  child: Container(
+                    width: 300,
+                    child: TextField(
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 2.0,
+                          ),
+                        ),
+                        labelText: 'Password',
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Transform.translate(
+                        offset: Offset(0.0, -30.0),
+                        child: InkWell(
+                          onTap: () async {
+                            bool hasPermission = await permission();
+                            if (hasPermission) {
+                              try {
+                                await loginProvider.signInWithGoogle();
+                                print("구글 로그인 성공");
+                                if (!mounted) return;
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/home', (route) => false);
+                              } catch (e) {
+                                if (e is FirebaseAuthException) {
+                                  print(e.message!);
+                                }
+                              }
+                            } else {
+                              print('위치 권한이 필요합니다.');
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                width: 2.0,
+                                color: Color(0xFFAAAAAA),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Image.asset(
+                                "assets/google.png",
+                                height: 30,
+                                width: 30,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      Transform.translate(
+                        offset: Offset(0.0, -30.0),
+                        child: InkWell(
+                          onTap: () async {
+                            bool hasPermission = await permission();
+                            if (hasPermission) {
+                              try {
+                                await loginProvider.signInWithAnonymous();
+                                print("익명 로그인 성공");
+                                if (!mounted) return;
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/home', (route) => false);
+                              } catch (e) {
+                                if (e is FirebaseAuthException) {
+                                  print(e.message!);
+                                }
+                              }
+                            } else {
+                              print("위치 권한이 필요합니다.");
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                width: 2.0,
+                                color: Color(0xFFAAAAAA),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Text(
+                                "익명",
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontFamily: 'GODO',
+                                  color: Color(0xFF333333),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-
