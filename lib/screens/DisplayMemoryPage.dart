@@ -1,3 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:memo_re/providers/postProvider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:memo_re/utils/vars.dart';
 import 'package:share_plus/share_plus.dart';
@@ -7,6 +11,34 @@ class DisplayMemoryPage extends StatelessWidget {
   final String imageUrl;
 
   DisplayMemoryPage({required this.memory, required this.imageUrl});
+
+
+  Future uploadMemoryToFirebase(String memory, String imageUrl) async {
+    try {
+
+      final uid = FirebaseAuth.instance.currentUser?.uid;
+      if (uid == null) { // 회원 아니면 X
+        print('Error: User is not logged in');
+        return;
+      }
+
+      // Firestore에 게시물 정보들을 저장
+      DocumentReference postRef = await FirebaseFirestore.instance.collection('posts').add({
+        'imageUrl': imageUrl,
+        'uid': uid,
+        'text': memory,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      // 생성된 문서 ID(postId)를 가져와서 방금 생성한 문서에 업데이트
+      String postId = postRef.id;
+      await postRef.update({'postId': postId});
+
+      print('Memory uploaded to Firebase Firestore! Memory: $memory, ImageURL: $imageUrl, PostID: $postId');
+    } catch (e) {
+      print('uploadMemoryToFirebase error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +85,12 @@ class DisplayMemoryPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    // 업로드 버튼이 눌렸을 때 수행할 동작을 추가
+                  onPressed: () async {
+                    try {
+                      await uploadMemoryToFirebase(memory, imageUrl);
+                    } catch (e) {
+                      print('Error uploading memory to Firebase: $e');
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.amber[500],
