@@ -17,9 +17,8 @@ class DisplayMemoryPage extends StatelessWidget {
         title: Text(
           '추억 생성 완료!',
           style: TextStyle(
-            fontFamily: 'GODO',
-            fontWeight: FontWeight.bold,
-            fontSize: 50.0,
+            fontFamily: 'Cafe',
+            fontSize: 30.0,
             color: Colors.black54,
           ),
         ),
@@ -58,9 +57,15 @@ class DisplayMemoryPage extends StatelessWidget {
                     // 업로드 버튼이 눌렸을 때 수행할 동작을 추가
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.amber[800],
+                    primary: Colors.amber[500],
                   ),
-                  child: Text('업로드'),
+                  child: Text('업로드',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Cafe',
+                      color: Colors.black54,
+                    ),
+                  ),
                 ),
                 SizedBox(width: 20), // 업로드 버튼과 공유 버튼 사이의 간격 조절
                 ElevatedButton(
@@ -68,9 +73,15 @@ class DisplayMemoryPage extends StatelessWidget {
                     _shareApp();
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.amber[800],
+                    primary: Colors.amber[500],
                   ),
-                  child: Text('공유'),
+                  child: Text('공유',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Cafe',
+                      color: Colors.black54,
+                    ),
+                  ),
                 ),
               ],
             ),
