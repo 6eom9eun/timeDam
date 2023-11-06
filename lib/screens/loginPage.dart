@@ -59,15 +59,15 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Transform.translate(
-                  offset: Offset(0.0, 30.0),
+                  offset: Offset(0.0, 70.0),
                   child: Image.asset(
                     "assets/main_logo.png",
-                    width: 500,
-                    height: 400,
+                    width: 350,
+                    height: 300,
                   ),
                 ),
                 Transform.translate(
-                  offset: Offset(0.0, -150.0),
+                  offset: Offset(0.0, -40.0),
                   child: const Text(
                     "기억담",
                     style: TextStyle(
@@ -79,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Transform.translate(
-                  offset: Offset(0.0, -150.0),
+                  offset: Offset(0.0, -80.0),
                   child: Container(
                     width: 300,
                     child: TextField(
@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Transform.translate(
-                  offset: Offset(0.0, -140.0),
+                  offset: Offset(0.0, -70.0),
                   child: Container(
                     width: 300,
                     child: TextField(
@@ -111,13 +111,34 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
+                Transform.translate(
+                  offset: Offset(0.0, -30.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 60, vertical: 10),
+                      primary: Colors.amber[300],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    child: Text(
+                      "로그인",
+                      style: TextStyle(
+                        fontSize: 20, // 버튼 텍스트 크기 조정
+                        color: Colors.black87, // 버튼 텍스트 색상 조정
+                      ),
+                    ),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Transform.translate(
-                        offset: Offset(0.0, -30.0),
+                        offset: Offset(0.0, 0.0),
                         child: InkWell(
                           onTap: () async {
                             bool hasPermission = await permission();
@@ -158,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       SizedBox(width: 20),
                       Transform.translate(
-                        offset: Offset(0.0, -30.0),
+                        offset: Offset(0.0, 0.0),
                         child: InkWell(
                           onTap: () async {
                             bool hasPermission = await permission();
