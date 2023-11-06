@@ -67,7 +67,11 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.account_circle_outlined),
             title: Text(
               '계정 관리',
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'CafeAir',
+              ),
             ),
             onTap: () {
               Navigator.pop(context);
@@ -83,7 +87,11 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.settings_outlined),
             title: Text(
               '설정',
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'CafeAir',
+              ),
             ),
             onTap: () {
               Navigator.pop(context);
@@ -99,7 +107,11 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.description_outlined),
             title: Text(
               '이용약관',
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'CafeAir',
+              ),
             ),
             onTap: () {
               Navigator.pop(context);
@@ -115,7 +127,11 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.mail_outline),
             title: Text(
               '문의하기',
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'CafeAir',
+              ),
             ),
             onTap: () {
               Navigator.pop(context);
@@ -131,7 +147,11 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.exit_to_app),
             title: Text(
               '로그아웃',
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'CafeAir',
+              ),
             ),
             onTap: () async {
               await FirebaseAuth.instance.signOut();
