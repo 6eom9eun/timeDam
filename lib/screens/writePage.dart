@@ -5,11 +5,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:memo_re/screens/voicePage.dart';
 import 'package:memo_re/utils/vars.dart';
 import 'package:provider/provider.dart';
 import 'package:memo_re/providers/postProvider.dart';
 import 'package:http/http.dart' as http;
+import 'package:speech_to_text/speech_to_text.dart';
 import 'DisplayMemoryPage.dart';
 import 'package:memo_re/screens/CreatingPage.dart';
 
@@ -35,6 +35,7 @@ class WritePage extends StatefulWidget {
 class _WritePageState extends State<WritePage> {
   File? _image;
   final picker = ImagePicker();
+  final speech = SpeechToText();
   TextEditingController _textController = TextEditingController();
 
 
@@ -107,6 +108,27 @@ class _WritePageState extends State<WritePage> {
     );
   }
 
+  Future<void> startListening() async {
+    if (!await speech.initialize()) {
+      // 음성 입력 초기화에 실패한 경우
+      return;
+    }
+
+    if (speech.isListening) {
+      // 이미 음성 입력 중인 경우
+      await speech.stop();
+    }
+
+    final result = await speech.listen();
+    if (result.finalResult != null) {
+      // 음성 입력이 성공적으로 완료된 경우
+      final inputText = result.finalResult;
+      // TODO: 음성 입력된 텍스트를 처리하고 저장합니다.
+      print('인식된 음성: $inputText'); // 음성 입력된 텍스트를 출력
+      _textController.text = inputText;
+    }
+  }
+
   Future getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
@@ -170,11 +192,8 @@ class _WritePageState extends State<WritePage> {
                   Image.asset('assets/logo.png', width: 80, height: 80),
                   SizedBox(height: 10),
                   Text(
-                    '  추억을 기록하세요!',
-                    style: TextStyle(
-                      fontFamily: 'Cafe',
-                      fontSize: 30,
-                    ),
+                    '추억을 기록하세요!',
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 30),
                   Container(
@@ -201,7 +220,7 @@ class _WritePageState extends State<WritePage> {
                             backgroundColor: AppColors.primaryColor(),
                             foregroundColor: Colors.black,
                           ),
-                          child: Text('사진 고르기',
+                          child: Text('이미지 고르기',
                             style: TextStyle(
                               fontSize: 18,
                               fontFamily: 'Cafe',
@@ -230,12 +249,7 @@ class _WritePageState extends State<WritePage> {
                           child: Icon(Icons.keyboard),
                         ),
                         ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => VoiceInputPage()),
-                            );
-                          },
+                          onPressed: startListening, // replace with your function
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primaryColor(),
                             foregroundColor: Colors.black,
