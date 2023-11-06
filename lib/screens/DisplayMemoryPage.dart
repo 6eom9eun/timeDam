@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memo_re/utils/vars.dart';
-
+import 'package:share_plus/share_plus.dart';
 
 class DisplayMemoryPage extends StatelessWidget {
   final String memory;
@@ -17,7 +17,7 @@ class DisplayMemoryPage extends StatelessWidget {
         title: Text(
           '추억 생성 완료!',
           style: TextStyle(
-            fontFamily:'GODO',
+            fontFamily: 'GODO',
             fontWeight: FontWeight.bold,
             fontSize: 50.0,
             color: Colors.black54,
@@ -65,7 +65,7 @@ class DisplayMemoryPage extends StatelessWidget {
                 SizedBox(width: 20), // 업로드 버튼과 공유 버튼 사이의 간격 조절
                 ElevatedButton(
                   onPressed: () {
-                    // 공유 버튼이 눌렸을 때 수행할 동작을 추가
+                    _shareApp();
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.amber[800],
@@ -78,5 +78,8 @@ class DisplayMemoryPage extends StatelessWidget {
         ),
       ),
     );
+  }
+  void _shareApp() {
+    Share.share('',subject: '나의 추억 공유'); // 아무 내용이 없는 빈 문자열을 전달하여 구글 앱의 공유 창 열기
   }
 }
