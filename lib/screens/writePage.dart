@@ -5,11 +5,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:memo_re/screens/voicePage.dart';
 import 'package:memo_re/utils/vars.dart';
 import 'package:provider/provider.dart';
 import 'package:memo_re/providers/postProvider.dart';
 import 'package:http/http.dart' as http;
-import 'package:speech_to_text/speech_to_text.dart';
 import 'DisplayMemoryPage.dart';
 import 'package:memo_re/screens/CreatingPage.dart';
 
@@ -35,10 +35,8 @@ class WritePage extends StatefulWidget {
 class _WritePageState extends State<WritePage> {
   File? _image;
   final picker = ImagePicker();
-  final speech = SpeechToText();
   TextEditingController _textController = TextEditingController();
-  bool hasImage = false; // New state variable
-  bool showInputOptions = false;
+
 
   Future getText() async {
     showDialog(
@@ -109,27 +107,6 @@ class _WritePageState extends State<WritePage> {
     );
   }
 
-  Future<void> startListening() async {
-    if (!await speech.initialize()) {
-      // 음성 입력 초기화에 실패한 경우
-      return;
-    }
-
-    if (speech.isListening) {
-      // 이미 음성 입력 중인 경우
-      await speech.stop();
-    }
-
-    final result = await speech.listen();
-    if (result.finalResult != null) {
-      // 음성 입력이 성공적으로 완료된 경우
-      final inputText = result.finalResult;
-      // TODO: 음성 입력된 텍스트를 처리하고 저장합니다.
-      print('인식된 음성: $inputText'); // 음성 입력된 텍스트를 출력
-      _textController.text = inputText;
-    }
-  }
-
   Future getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
@@ -144,10 +121,7 @@ class _WritePageState extends State<WritePage> {
 
   Future uploadFile() async {
     if (_image == null) return;
-    final fileName = _image!
-        .path
-        .split('/')
-        .last;
+    final fileName = _image!.path.split('/').last;
     final destination = 'images/$fileName';
 
     try {
@@ -163,8 +137,7 @@ class _WritePageState extends State<WritePage> {
       }
 
       // Firestore에 게시물 정보들을 먼저 저장하지만 postId는 아직 모릅니다.
-      DocumentReference postRef = await FirebaseFirestore.instance.collection(
-          'posts').add({
+      DocumentReference postRef = await FirebaseFirestore.instance.collection('posts').add({
         'imageUrl': url,
         'uid': uid,
         'text': _textController.text,
@@ -175,11 +148,8 @@ class _WritePageState extends State<WritePage> {
       String postId = postRef.id;
       await postRef.update({'postId': postId});
 
-      Provider
-          .of<PostProvider>(context, listen: false)
-          .imageUrl = url;
-      print(
-          'File uploaded to Firebase Storage and Firestore! URL: $url, UID: $uid, PostID: $postId');
+      Provider.of<PostProvider>(context, listen: false).imageUrl = url;
+      print('File uploaded to Firebase Storage and Firestore! URL: $url, UID: $uid, PostID: $postId');
     } catch (e) {
       print('uploadFile error: $e');
     }
@@ -194,7 +164,6 @@ class _WritePageState extends State<WritePage> {
         children: [
           Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0), // Padding for the scroll view
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -202,126 +171,77 @@ class _WritePageState extends State<WritePage> {
                   SizedBox(height: 10),
                   Text(
                     '추억을 기록하세요!',
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontFamily: 'Cafe',
+                      fontSize: 28,
+                    ),
                   ),
                   SizedBox(height: 30),
                   Container(
-                    padding: const EdgeInsets.all(20.0),
+                    padding: EdgeInsets.all(80),
                     decoration: BoxDecoration(
                       color: AppColors.primaryColor1(),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 7,
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
                           blurRadius: 7,
-                          offset: Offset(0, 2),
+                          offset: Offset(0, 3),
                         ),
                       ],
-
-                      // 그라데이션 코드
-                      // gradient: LinearGradient(
-                      //   begin: Alignment.topLeft,
-                      //   end: Alignment.bottomRight,
-                      //   colors: [
-                      //     AppColors.primaryColor1().withOpacity(0.8),
-                      //     AppColors.primaryColor(),
-                      //   ],
-                      // ),
-
                     ),
                     child: Column(
-                      mainAxisSize: MainAxisSize.min, // To make the container wrap its content
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (!showInputOptions) ...[
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                hasImage = true;
-                                showInputOptions = true;
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primaryColor(),
-                              fixedSize: Size(350, 100),
-                            ),
-                            child: Text(
-                              '사진을 갖고 계신 추억인가요?',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
+                        // Your widget for image uploading will be here
+                        ElevatedButton(
+                          onPressed: getImage, // replace with your function
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryColor(),
+                            foregroundColor: Colors.black,
+                          ),
+                          child: Text('이미지 고르기',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Cafe',
                             ),
                           ),
-                          SizedBox(height: 10),
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                hasImage = false;
-                                showInputOptions = true;
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primaryColor(),
-                              fixedSize: Size(350, 100),
-                            ),
-                            child: Text(
-                              '사진을 갖고 계시지 않은 추억인가요?',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
+                        ),
+                        ElevatedButton(
+                          onPressed: uploadFile, // replace with your function
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryColor(),
+                            foregroundColor: Colors.black,
+                          ),
+                          child: Text('업로드',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Cafe',
                             ),
                           ),
-                        ],
-                        if (showInputOptions) ...[
-                          if (hasImage) ...[
-                            ElevatedButton(
-                              onPressed: getImage,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.primaryColor(),
-                                foregroundColor: Colors.black,
-                              ),
-                              child: Icon(Icons.image, size: 50,),
-                            ),
-                            SizedBox(height: 20),
-                          ],
-                          ElevatedButton(
-                            onPressed: getText,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primaryColor(),
-                              foregroundColor: Colors.black,
-                            ),
-                            child: Icon(Icons.keyboard, size: 50,),
+                        ),
+                        ElevatedButton(
+                          onPressed: getText, // replace with your function
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryColor(),
+                            foregroundColor: Colors.black,
                           ),
-                          SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: startListening,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primaryColor(),
-                              foregroundColor: Colors.black,
-                            ),
-                            child: Icon(Icons.mic, size: 50,),
+                          child: Icon(Icons.keyboard),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => VoiceInputPage()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryColor(),
+                            foregroundColor: Colors.black,
                           ),
-                          SizedBox(height: 20),
-                          // Confirmation button
-                          ElevatedButton(
-                            onPressed: () {
-                              // Add your confirmation logic here
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primaryColor(),
-                              foregroundColor: Colors.black,
-                            ),
-                            child: Text(
-                              '확인',
-                              style: TextStyle(
-                                  fontSize: 28
-                              ),),
-                          ),
-                        ],
+                          child: Icon(Icons.mic),
+                        ),
                       ],
                     ),
                   ),
@@ -329,12 +249,13 @@ class _WritePageState extends State<WritePage> {
               ),
             ),
           ),
+          // 뒤로가기
           Positioned(
             top: 10,
             left: 10,
             child: SafeArea(
               child: IconButton(
-                icon: Icon(Icons.close, color: Colors.black),
+                icon: Icon(Icons.arrow_back, color: Colors.black),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
