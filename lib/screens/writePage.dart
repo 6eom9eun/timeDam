@@ -144,7 +144,10 @@ class _WritePageState extends State<WritePage> {
 
   Future uploadFile() async {
     if (_image == null) return;
-    final fileName = _image!.path.split('/').last;
+    final fileName = _image!
+        .path
+        .split('/')
+        .last;
     final destination = 'images/$fileName';
 
     try {
@@ -160,7 +163,8 @@ class _WritePageState extends State<WritePage> {
       }
 
       // Firestore에 게시물 정보들을 먼저 저장하지만 postId는 아직 모릅니다.
-      DocumentReference postRef = await FirebaseFirestore.instance.collection('posts').add({
+      DocumentReference postRef = await FirebaseFirestore.instance.collection(
+          'posts').add({
         'imageUrl': url,
         'uid': uid,
         'text': _textController.text,
@@ -171,8 +175,11 @@ class _WritePageState extends State<WritePage> {
       String postId = postRef.id;
       await postRef.update({'postId': postId});
 
-      Provider.of<PostProvider>(context, listen: false).imageUrl = url;
-      print('File uploaded to Firebase Storage and Firestore! URL: $url, UID: $uid, PostID: $postId');
+      Provider
+          .of<PostProvider>(context, listen: false)
+          .imageUrl = url;
+      print(
+          'File uploaded to Firebase Storage and Firestore! URL: $url, UID: $uid, PostID: $postId');
     } catch (e) {
       print('uploadFile error: $e');
     }
@@ -187,6 +194,7 @@ class _WritePageState extends State<WritePage> {
         children: [
           Center(
             child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0), // Padding for the scroll view
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -197,90 +205,122 @@ class _WritePageState extends State<WritePage> {
                     style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 30),
-                  if (!showInputOptions) ...[
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          hasImage = true;
-                          showInputOptions = true;
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: AppColors.primaryColor(),
-                        fixedSize: Size(350, 100), // Set the fixed size for the button
-                      ),
-                      child: Text(
-                        '사진을 갖고 계신 추억인가요?',
-                        style: TextStyle(
-                          color: Colors.black, // Text color
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20, // Text size
+                  Container(
+                    padding: const EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor1(),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          spreadRadius: 7,
+                          blurRadius: 7,
+                          offset: Offset(0, 2),
                         ),
-                      ),
+                      ],
+
+                      // 그라데이션 코드
+                      // gradient: LinearGradient(
+                      //   begin: Alignment.topLeft,
+                      //   end: Alignment.bottomRight,
+                      //   colors: [
+                      //     AppColors.primaryColor1().withOpacity(0.8),
+                      //     AppColors.primaryColor(),
+                      //   ],
+                      // ),
+
                     ),
-                    SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          hasImage = false;
-                          showInputOptions = true;
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: AppColors.primaryColor(),
-                        fixedSize: Size(350, 100), // Set the fixed size for the button
-                      ),
-                      child: Text(
-                        '사진을 갖고 계시지 않은 추억인가요?',
-                        style: TextStyle(
-                          color: Colors.black, // Text color
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20, // Text size
-                        ),
-                      ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min, // To make the container wrap its content
+                      children: [
+                        if (!showInputOptions) ...[
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                hasImage = true;
+                                showInputOptions = true;
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primaryColor(),
+                              fixedSize: Size(350, 100),
+                            ),
+                            child: Text(
+                              '사진을 갖고 계신 추억인가요?',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                hasImage = false;
+                                showInputOptions = true;
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primaryColor(),
+                              fixedSize: Size(350, 100),
+                            ),
+                            child: Text(
+                              '사진을 갖고 계시지 않은 추억인가요?',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ],
+                        if (showInputOptions) ...[
+                          if (hasImage) ...[
+                            ElevatedButton(
+                              onPressed: getImage,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primaryColor(),
+                                foregroundColor: Colors.black,
+                              ),
+                              child: Text('이미지 고르기'),
+                            ),
+                            SizedBox(height: 20),
+                          ],
+                          ElevatedButton(
+                            onPressed: getText,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primaryColor(),
+                              foregroundColor: Colors.black,
+                            ),
+                            child: Icon(Icons.keyboard),
+                          ),
+                          SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: startListening,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primaryColor(),
+                              foregroundColor: Colors.black,
+                            ),
+                            child: Icon(Icons.mic),
+                          ),
+                          SizedBox(height: 20),
+                          // Confirmation button
+                          ElevatedButton(
+                            onPressed: () {
+                              // Add your confirmation logic here
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primaryColor(),
+                              foregroundColor: Colors.black,
+                            ),
+                            child: Text('확인'),
+                          ),
+                        ],
+                      ],
                     ),
-                    SizedBox(height: 20),
-                  ],
-                  if (hasImage && showInputOptions) ...[
-                    ElevatedButton(
-                      onPressed: getImage,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryColor(),
-                        foregroundColor: Colors.black,
-                      ),
-                      child: Text('이미지 고르기'),
-                    ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: uploadFile,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryColor(),
-                        foregroundColor: Colors.black,
-                      ),
-                      child: Text('업로드'),
-                    ),
-                    SizedBox(height: 20),
-                  ],
-                  if (showInputOptions) ...[
-                    ElevatedButton(
-                      onPressed: getText,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryColor(),
-                        foregroundColor: Colors.black,
-                      ),
-                      child: Icon(Icons.keyboard),
-                    ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: startListening,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryColor(),
-                        foregroundColor: Colors.black,
-                      ),
-                      child: Icon(Icons.mic),
-                    ),
-                    SizedBox(height: 20),
-                  ],
+                  ),
                 ],
               ),
             ),
@@ -290,7 +330,7 @@ class _WritePageState extends State<WritePage> {
             left: 10,
             child: SafeArea(
               child: IconButton(
-                icon: Icon(Icons.arrow_back, color: Colors.black),
+                icon: Icon(Icons.close, color: Colors.black),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
