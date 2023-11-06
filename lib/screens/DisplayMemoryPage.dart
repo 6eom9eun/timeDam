@@ -86,8 +86,9 @@ class DisplayMemoryPage extends StatelessWidget {
                   onPressed: () async {
                     try {
                       await uploadMemoryToFirebase(memory, imageUrl);
-                      Navigator.of(context).pop(); // 현재 페이지 닫기
-                      Navigator.of(context).pop(); // 이전 페이지로 이동
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop(); //피드 창으로 이동
                     } catch (e) {
                       print('Error uploading memory to Firebase: $e');
                     }

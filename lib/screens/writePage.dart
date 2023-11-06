@@ -177,12 +177,14 @@ class _WritePageState extends State<WritePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset('assets/logo.png', width: 80, height: 80),
-                  SizedBox(height: 10),
+                  SizedBox(height: 20),
                   Text(
                     '추억을 기록하세요!',
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 30,
+                        fontFamily: 'Cafe'),
                   ),
-                  SizedBox(height: 30),
+                  SizedBox(height: 60),
                   Container(
                     padding: const EdgeInsets.all(20.0),
                     decoration: BoxDecoration(
@@ -224,10 +226,10 @@ class _WritePageState extends State<WritePage> {
                               fixedSize: Size(350, 100),
                             ),
                             child: Text(
-                              '사진을 갖고 계신 추억인가요?',
+                              '추억할 사진을 가지고 있나요?',
                               style: TextStyle(
                                 color: Colors.black,
-                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Cafe',
                                 fontSize: 20,
                               ),
                             ),
@@ -245,10 +247,10 @@ class _WritePageState extends State<WritePage> {
                               fixedSize: Size(350, 100),
                             ),
                             child: Text(
-                              '사진을 갖고 계시지 않은 추억인가요?',
+                              '추억할 사진을 가지고 있지 않나요?',
                               style: TextStyle(
                                 color: Colors.black,
-                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Cafe',
                                 fontSize: 20,
                               ),
                             ),
@@ -301,8 +303,10 @@ class _WritePageState extends State<WritePage> {
                             child: Text(
                               '확인',
                               style: TextStyle(
-                                  fontSize: 28
-                              ),),
+                                  fontSize: 26,
+                                fontFamily: 'Cafe',
+                              ),
+                            ),
                           ),
                         ],
                       ],
