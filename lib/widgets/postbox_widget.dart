@@ -43,11 +43,11 @@ Widget buildGrid() {
         itemBuilder: (context, index) {
           var post = posts[index];
           var imageUrl = post['imageUrl'];
+          var postId = post.id;
 
           if (imageUrl == null) {
             return Center(child: Text('이미지를 불러올 수 없습니다.'));
           }
-
           return GestureDetector(
             onTap: () {
               showDialog(
@@ -71,6 +71,13 @@ Widget buildGrid() {
                     ),
                     actions: <Widget>[
                       TextButton(
+                        child: Text('삭제'),
+                        onPressed: () {
+                          // 삭제 확인 다이얼로그를 띄웁니다.
+                          _showDeleteConfirmation(context, postId);
+                        },
+                      ),
+                      TextButton(
                         child: Text('닫기'),
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -81,7 +88,6 @@ Widget buildGrid() {
                 },
               );
             },
-
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20.0), // 모서리를 둥글게 만듭니다.
               child: Image.network(
@@ -98,10 +104,53 @@ Widget buildGrid() {
             ),
           );
         },
-
         shrinkWrap: true,
         physics: ClampingScrollPhysics(),
       );
     },
   );
+}
+
+// post 삭제 확인 알림 함수
+Future<void> _showDeleteConfirmation(BuildContext context, String postId) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button for close
+    builder: (BuildContext dialogContext) {
+      return AlertDialog(
+        title: Text('게시물 삭제'),
+        content: Text('정말로 삭제하실거에요?'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('아니오'),
+            onPressed: () {
+              Navigator.of(dialogContext).pop(); // 다이얼로그 닫기
+            },
+          ),
+          TextButton(
+            child: Text('예'),
+            onPressed: () {
+              Navigator.of(dialogContext).pop(); // 다이얼로그 닫기
+              _deletePost(context, postId); // 게시물 삭제 함수 호출
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+// post 삭제 함수
+Future<void> _deletePost(BuildContext context, String postId) async {
+  try {
+    await FirebaseFirestore.instance.collection('posts').doc(postId).delete();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('게시물이 삭제되었습니다.')),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('게시물을 삭제하는 중 오류가 발생했습니다.')),
+    );
+  }
 }

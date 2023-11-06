@@ -143,10 +143,7 @@ class _WritePageState extends State<WritePage> {
 
   Future uploadFile() async {
     if (_image == null) return;
-    final fileName = _image!
-        .path
-        .split('/')
-        .last;
+    final fileName = _image!.path.split('/').last;
     final destination = 'images/$fileName';
 
     try {
@@ -161,79 +158,37 @@ class _WritePageState extends State<WritePage> {
         return;
       }
 
-      // Firestore에 게시물 정보들을 저장
-      await FirebaseFirestore.instance.collection('posts').add({
+      // Firestore에 게시물 정보들을 먼저 저장하지만 postId는 아직 모릅니다.
+      DocumentReference postRef = await FirebaseFirestore.instance.collection('posts').add({
         'imageUrl': url,
         'uid': uid,
         'text': _textController.text,
         'createdAt': FieldValue.serverTimestamp(),
       });
 
-      Provider
-          .of<PostProvider>(context, listen: false)
-          .imageUrl = url;
-      print(
-          'File uploaded to Firebase Storage and Firestore! URL: $url, UID: $uid');
+      // 생성된 문서 ID(postId)를 가져와서 방금 생성한 문서에 업데이트합니다.
+      String postId = postRef.id;
+      await postRef.update({'postId': postId});
+
+      Provider.of<PostProvider>(context, listen: false).imageUrl = url;
+      print('File uploaded to Firebase Storage and Firestore! URL: $url, UID: $uid, PostID: $postId');
     } catch (e) {
       print('uploadFile error: $e');
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(200.0), // 앱바의 높이
-        child: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(Icons.close),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              color: Color(0xFFFFCF52), // 앱바의 배경 색상 설정
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(150), // 앱바의 하단 모서리를 둥글게 설정
-              ),
-            ),
-            child: Align(
-              alignment: Alignment(-0.6, 0),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 70),
-                    Text(
-                      '당신의 추억은\n무엇인가요?',
-                      style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      '저희에게 추억을 알려주세요 !',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent, // 배경색을 투명하게 설정
+        elevation: 0, // 그림자 제거
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Center(
         child: Align(
-          alignment: Alignment.topCenter,
+          alignment: Alignment.center,
           child: Container(
             padding: EdgeInsets.all(30),
             decoration: BoxDecoration(

@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
               Transform.translate(
                 offset: Offset(0.0, -30.0),
                 child: const Text(
-                  "메모:re", // "memore" 텍스트 추가
+                  "시간담", // "memore" 텍스트 추가
                   style: TextStyle(
                     fontFamily: 'GODO',
                     fontSize: 130,
