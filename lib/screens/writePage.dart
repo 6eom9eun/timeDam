@@ -284,7 +284,7 @@ class _WritePageState extends State<WritePage> {
                                 backgroundColor: AppColors.primaryColor(),
                                 foregroundColor: Colors.black,
                               ),
-                              child: Text('이미지 고르기'),
+                              child: Icon(Icons.image, size: 50,),
                             ),
                             SizedBox(height: 20),
                           ],
@@ -294,7 +294,7 @@ class _WritePageState extends State<WritePage> {
                               backgroundColor: AppColors.primaryColor(),
                               foregroundColor: Colors.black,
                             ),
-                            child: Icon(Icons.keyboard),
+                            child: Icon(Icons.keyboard, size: 50,),
                           ),
                           SizedBox(height: 20),
                           ElevatedButton(
@@ -303,7 +303,7 @@ class _WritePageState extends State<WritePage> {
                               backgroundColor: AppColors.primaryColor(),
                               foregroundColor: Colors.black,
                             ),
-                            child: Icon(Icons.mic),
+                            child: Icon(Icons.mic, size: 50,),
                           ),
                           SizedBox(height: 20),
                           // Confirmation button
@@ -315,7 +315,11 @@ class _WritePageState extends State<WritePage> {
                               backgroundColor: AppColors.primaryColor(),
                               foregroundColor: Colors.black,
                             ),
-                            child: Text('확인'),
+                            child: Text(
+                                '확인',
+                            style: TextStyle(
+                              fontSize: 28
+                            ),),
                           ),
                         ],
                       ],
