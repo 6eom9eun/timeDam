@@ -16,17 +16,20 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 // 백그라운드 위치 추적 설정 함수
 Future<void> initLocationState() async {
-  // 백그라운드 fetch 구성
-  await BackgroundFetch.configure(
+  int status = await BackgroundFetch.configure(
     BackgroundFetchConfig(
-      minimumFetchInterval: 15, // 최소 간격 설정(분 단위)
-      stopOnTerminate: false, // 앱 종료 시 중단 여부
-      enableHeadless: true, // 헤드리스 태스크 활성화
-      startOnBoot: true, // 부팅 시 시작
-      requiredNetworkType: NetworkType.ANY, // 네트워크 타입 요구사항
+      minimumFetchInterval: 15, // 백그라운드 페치가 발생 최소 간격, 최소 15분, 그 이상 유료
+      stopOnTerminate: false,   // false로 설정하면 앱 종료 후에도 계속 작동
+      enableHeadless: true,     // 'Headless' 작업을 활성화 : 앱이 포그라운드나 백그라운드 상태가 아닐 때도 작업을 수행
+      startOnBoot: true,        // 장치가 부팅될 때 백그라운드 페치를 시작할지 여부를 설정
+      requiredNetworkType: NetworkType.ANY, // 백그라운드 작업 네트워크 타입 설정 : ANY는 모든 네트워크
+      requiresBatteryNotLow: false,          // 배터리가 낮지 않아야 하는지 여부를 설정 : false이면 배터리 상태와 관계 X
+      requiresCharging: false,               // 충전 중일 때만 백그라운드 페치 작동 : false이면 충전 상태와 관계 X
+      requiresStorageNotLow: false,          // 저장공간이 낮지 않아야 하는지 여부 : false이면 저장공간 상태와 관계 X
+      requiresDeviceIdle: false,             // 장치가 유휴 상태일 때만 백그라운드 작업을 수행 : false이면 장치 상태와 관계 X
     ),
-    _onBackgroundFetch, // 백그라운드 페치 이벤트 핸들러
-    _onBackgroundFetchTimeout, // 타임아웃 이벤트 핸들러
+    _onBackgroundFetch,
+    _onBackgroundFetchTimeout,
   );
 }
 
@@ -37,23 +40,32 @@ Future<void> _saveLocation(String uid, String taskId) async {
     Position position = await getLocation(); // 현재 위치 획득
     // Firestore에 저장할 위치 데이터
     Map<String, dynamic> locationData = {
+      'timestamp': FieldValue.serverTimestamp(), // 서버 시간 사용
       'latitude': position.latitude,
       'longitude': position.longitude,
-      'timestamp': FieldValue.serverTimestamp(), // 서버 시간 사용
-      'accuracy': position.accuracy,
-      'heading': position.heading,
-      'speed': position.speed,
     };
 
     // 위치 데이터 Firestore에 저장
-    await firestore.collection('users').doc(uid).collection('locations').add(locationData);
+    await firestore.collection('locations').doc(uid).set({uid: locationData});
     print("Location saved for user $uid with taskId $taskId");
+
+    // 노인이 좋아할만한 장소 검색 키워드
+    List<String> placeKeywords = ['공원', '도서관', '경로당', '산책로',];
+    // 주변 장소 검색 후 저장
+    List<VisitedPlaceModel> places = await getPlacesKakao(
+        placeKeywords, position.latitude, position.longitude);
+
+    // 검색된 장소들을 Firestore에 저장
+    for (var place in places) {
+      await firestore.collection('places').doc(uid).collection('place').add(place.toJson());
+    }
+    print("Places saved for user $uid with taskId $taskId");
+
   } catch (e) {
-    print("Failed to save location: $e");
+    print("Failed to save location or places: $e");
   }
 }
-
-// 백그라운드 페치 이벤트 처리 함수
+// 백그라운드 페치 이벤트가 발생했을 때 호출되는 함수
 void _onBackgroundFetch(String taskId) async {
   print("[BackgroundFetch] Event received $taskId");
   final User? user = auth.currentUser;
@@ -73,7 +85,7 @@ void _onBackgroundFetch(String taskId) async {
   BackgroundFetch.finish(taskId);
 }
 
-// 백그라운드 페치 타임아웃 처리 함수
+// 백그라운드 페치 작업이 시간 내에 완료되지 않았을 때 호출되는 함수
 void _onBackgroundFetchTimeout(String taskId) async {
   print("[BackgroundFetch] TIMEOUT: $taskId");
   BackgroundFetch.finish(taskId);
@@ -119,7 +131,7 @@ Future<Position> getLocation() async {
 // 카카오 로컬 API를 통해 장소 검색하는 함수
 Future<List<VisitedPlaceModel>> getPlacesKakao(
     var placeNames, var latitude, var longitude) async {
-  var key = '9ed0df4a106dd50636a1ad5268d420cf'; // API 키 (주의: 배포하지 않도록 함)
+  var key = '9ed0df4a106dd50636a1ad5268d420cf'; // 배포 XXXXXXXXXXXXXXXXXXX
   var baseUrl = "https://dapi.kakao.com/v2/local/search/keyword.json";
   List<VisitedPlaceModel> responses = [];
 
