@@ -55,16 +55,20 @@ Future<void> _saveLocation(String uid, String taskId) async {
     List<VisitedPlaceModel> places = await getPlacesKakao(
         placeKeywords, position.latitude, position.longitude);
 
-    // 검색된 장소들을 Firestore에 저장
-    for (var place in places) {
-      await firestore.collection('places').doc(uid).collection('place').add(place.toJson());
-    }
+    // 검색된 장소들의 리스트를 맵으로 변환
+    List<Map<String, dynamic>> placesMap = places.map((place) => place.toJson()).toList();
+
+    // 검색된 장소들의 리스트를 Firestore에 저장
+    await firestore.collection('places').doc(uid).set({
+      'places': placesMap,
+    });
     print("Places saved for user $uid with taskId $taskId");
 
   } catch (e) {
     print("Failed to save location or places: $e");
   }
 }
+
 // 백그라운드 페치 이벤트가 발생했을 때 호출되는 함수
 void _onBackgroundFetch(String taskId) async {
   print("[BackgroundFetch] Event received $taskId");
