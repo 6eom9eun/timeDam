@@ -37,7 +37,8 @@ class _WritePageState extends State<WritePage> {
   final picker = ImagePicker();
   final speech = SpeechToText();
   TextEditingController _textController = TextEditingController();
-
+  bool hasImage = false; // New state variable
+  bool showInputOptions = false;
 
   Future getText() async {
     showDialog(
@@ -196,64 +197,94 @@ class _WritePageState extends State<WritePage> {
                     style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 30),
-                  Container(
-                    padding: EdgeInsets.all(80),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor1(),
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3),
+                  if (!showInputOptions) ...[
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          hasImage = true;
+                          showInputOptions = true;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColors.primaryColor(),
+                        fixedSize: Size(350, 100), // Set the fixed size for the button
+                      ),
+                      child: Text(
+                        '사진을 갖고 계신 추억인가요?',
+                        style: TextStyle(
+                          color: Colors.black, // Text color
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20, // Text size
                         ),
-                      ],
+                      ),
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Your widget for image uploading will be here
-                        ElevatedButton(
-                          onPressed: getImage, // replace with your function
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primaryColor(),
-                            foregroundColor: Colors.black,
-                          ),
-                          child: Text('이미지 고르기'),
+                    SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          hasImage = false;
+                          showInputOptions = true;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColors.primaryColor(),
+                        fixedSize: Size(350, 100), // Set the fixed size for the button
+                      ),
+                      child: Text(
+                        '사진을 갖고 계시지 않은 추억인가요?',
+                        style: TextStyle(
+                          color: Colors.black, // Text color
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20, // Text size
                         ),
-                        ElevatedButton(
-                          onPressed: uploadFile, // replace with your function
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primaryColor(),
-                            foregroundColor: Colors.black,
-                          ),
-                          child: Text('업로드'),
-                        ),
-                        ElevatedButton(
-                          onPressed: getText, // replace with your function
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primaryColor(),
-                            foregroundColor: Colors.black,
-                          ),
-                          child: Icon(Icons.keyboard),
-                        ),
-                        ElevatedButton(
-                          onPressed: startListening, // replace with your function
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primaryColor(),
-                            foregroundColor: Colors.black,
-                          ),
-                          child: Icon(Icons.mic),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                    SizedBox(height: 20),
+                  ],
+                  if (hasImage && showInputOptions) ...[
+                    ElevatedButton(
+                      onPressed: getImage,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryColor(),
+                        foregroundColor: Colors.black,
+                      ),
+                      child: Text('이미지 고르기'),
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: uploadFile,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryColor(),
+                        foregroundColor: Colors.black,
+                      ),
+                      child: Text('업로드'),
+                    ),
+                    SizedBox(height: 20),
+                  ],
+                  if (showInputOptions) ...[
+                    ElevatedButton(
+                      onPressed: getText,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryColor(),
+                        foregroundColor: Colors.black,
+                      ),
+                      child: Icon(Icons.keyboard),
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: startListening,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryColor(),
+                        foregroundColor: Colors.black,
+                      ),
+                      child: Icon(Icons.mic),
+                    ),
+                    SizedBox(height: 20),
+                  ],
                 ],
               ),
             ),
           ),
-          // 뒤로가기
           Positioned(
             top: 10,
             left: 10,
