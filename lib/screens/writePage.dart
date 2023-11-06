@@ -180,79 +180,91 @@ class _WritePageState extends State<WritePage> {
 
   @override
   Widget build(BuildContext context) {
-    var statusBarHeight = MediaQuery.of(context).padding.top;
-
     return Scaffold(
       backgroundColor: AppColors.backColor(),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent, // 배경색을 투명하게 설정
-        elevation: 0, // 그림자 제거
-        iconTheme: IconThemeData(color: Colors.black),
-      ),
-      body: Center(
-        child: Align(
-          alignment: Alignment.center,
-          child: Container(
-            padding: EdgeInsets.all(50),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _image == null
-                    ? Text('이미지를 업로드 해주세요.')
-                    : Container(
-                  width: 200, // 원하는 너비로 설정
-                  height: 200, // 원하는 높이로 설정
-                  child: Image.file(
-                    _image!,
-                    fit: BoxFit.cover, // 이미지가 컨테이너를 채우도록 설정
+      body: Stack(
+        children: [
+          Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('assets/logo.png', width: 80, height: 80),
+                  SizedBox(height: 10),
+                  Text(
+                    '추억을 기록하세요!',
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: getImage,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber[800],
+                  SizedBox(height: 30),
+                  Container(
+                    padding: EdgeInsets.all(80),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor1(),
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Your widget for image uploading will be here
+                        ElevatedButton(
+                          onPressed: getImage, // replace with your function
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryColor(),
+                            foregroundColor: Colors.black,
+                          ),
+                          child: Text('이미지 고르기'),
+                        ),
+                        ElevatedButton(
+                          onPressed: uploadFile, // replace with your function
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryColor(),
+                            foregroundColor: Colors.black,
+                          ),
+                          child: Text('업로드'),
+                        ),
+                        ElevatedButton(
+                          onPressed: getText, // replace with your function
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryColor(),
+                            foregroundColor: Colors.black,
+                          ),
+                          child: Icon(Icons.keyboard),
+                        ),
+                        ElevatedButton(
+                          onPressed: startListening, // replace with your function
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryColor(),
+                            foregroundColor: Colors.black,
+                          ),
+                          child: Icon(Icons.mic),
+                        ),
+                      ],
+                    ),
                   ),
-                  child: Text('이미지 고르기'),
-                ),
-                ElevatedButton(
-                  onPressed: uploadFile,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber[800],
-                  ),
-                  child: Text('업로드'),
-                ),
-                ElevatedButton(
-                  onPressed: getText,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber[800],
-                  ),
-                  child: Icon(Icons.keyboard),
-                ),
-                ElevatedButton(
-                  onPressed: startListening, // 음성 입력 함수 호출
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber[800],
-                  ),
-                  child: Icon(Icons.mic), // 음성 입력 버튼 추가
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-
+          // 뒤로가기
+          Positioned(
+            top: 10,
+            left: 10,
+            child: SafeArea(
+              child: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
