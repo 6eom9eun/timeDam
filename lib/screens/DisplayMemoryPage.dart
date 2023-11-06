@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:memo_re/providers/postProvider.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:memo_re/utils/vars.dart';
 import 'package:share_plus/share_plus.dart';
@@ -88,6 +86,8 @@ class DisplayMemoryPage extends StatelessWidget {
                   onPressed: () async {
                     try {
                       await uploadMemoryToFirebase(memory, imageUrl);
+                      Navigator.of(context).pop(); // 현재 페이지 닫기
+                      Navigator.of(context).pop(); // 이전 페이지로 이동
                     } catch (e) {
                       print('Error uploading memory to Firebase: $e');
                     }
