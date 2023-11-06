@@ -126,8 +126,9 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text(
                       "로그인",
                       style: TextStyle(
-                        fontSize: 20, // 버튼 텍스트 크기 조정
+                        fontSize: 22, // 버튼 텍스트 크기 조정
                         color: Colors.black87, // 버튼 텍스트 색상 조정
+                        fontFamily: 'Cafe',
                       ),
                     ),
                   ),
@@ -212,8 +213,8 @@ class _LoginPageState extends State<LoginPage> {
                               child: Text(
                                 "익명",
                                 style: TextStyle(
-                                  fontSize: 25,
-                                  fontFamily: 'GODO',
+                                  fontSize: 20,
+                                  fontFamily: 'Cafe',
                                   color: Color(0xFF333333),
                                 ),
                               ),

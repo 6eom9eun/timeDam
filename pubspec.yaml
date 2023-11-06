@@ -120,6 +120,16 @@ flutter:
       fonts:
         - asset: assets/fonts/GODO/godoMaum.ttf
 
+    - family: Cafe
+      fonts:
+        - asset: assets/fonts/Cafe/Cafe24Ohsquare-v2.0.ttf
+
+    - family: CafeAir
+      fonts:
+        - asset: assets/fonts/CafeAir/Cafe24OhsquareAir-v2.0.ttf
+
+
+
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
