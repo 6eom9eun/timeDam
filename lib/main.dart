@@ -18,6 +18,8 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+
+  initLocationState();
   BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
 
   runApp(
