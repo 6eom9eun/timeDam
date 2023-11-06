@@ -10,18 +10,25 @@ class VoiceInputPage extends StatefulWidget {
 
 class _VoiceInputPageState extends State<VoiceInputPage> {
   final SpeechToText speech = SpeechToText();
+  bool _speechInitialized = false;
   String inputText = "";
 
   @override
   void initState() {
     super.initState();
     initializeSpeechRecognition();
-    startListening();
   }
 
   Future<void> initializeSpeechRecognition() async {
-    if (await speech.initialize()) {
+    if (!_speechInitialized) {
+      _speechInitialized = await speech.initialize(onError: (error) {
+        // 에러 처리 로직
+        _speechInitialized = false;
+      });
       setState(() {});
+      if (_speechInitialized) {
+        startListening();
+      }
     }
   }
 
@@ -30,21 +37,24 @@ class _VoiceInputPageState extends State<VoiceInputPage> {
       await speech.stop();
     }
 
-    bool available = await speech.initialize();
-    if (available) {
-      await speech.listen(
-        onResult: (result) {
-          if (result.finalResult != null) {
-            setState(() {
-              inputText = result.finalResult as String;
-            });
-          }
-        },
-      );
-    }
+    await speech.listen(
+      onResult: (result) {
+        setState(() {
+          inputText = result.recognizedWords;
+          print(inputText); // stt 확인
+        });
+      },
+    );
   }
 
-  Widget build(BuildContext context) {
+  @override
+  void dispose() {
+    speech.stop();
+    super.dispose();
+  }
+
+  @override
+    Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -88,6 +98,15 @@ class _VoiceInputPageState extends State<VoiceInputPage> {
             SizedBox(height: 50),
             Text(
               '음성인식 중입니다..',
+              style: TextStyle(
+                fontFamily: 'CafeAir',
+                fontSize: 18,
+                color: Color(0xff777777),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              inputText,
               style: TextStyle(
                 fontFamily: 'CafeAir',
                 fontSize: 18,

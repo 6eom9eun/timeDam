@@ -12,6 +12,7 @@ import 'package:memo_re/providers/postProvider.dart';
 import 'package:http/http.dart' as http;
 import 'DisplayMemoryPage.dart';
 import 'package:memo_re/screens/CreatingPage.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 // 게시물 올리기, 추억 생성
 String generatedMemory = "";
@@ -278,12 +279,8 @@ class _WritePageState extends State<WritePage> {
                           ),
                           SizedBox(height: 20),
                           ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => VoiceInputPage()),
-                              );
-                            },
+                            onPressed:
+                                requestMicrophonePermission,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primaryColor(),
                               foregroundColor: Colors.black,
@@ -330,4 +327,38 @@ class _WritePageState extends State<WritePage> {
       ),
     );
   }
+
+
+
+  Future<void> requestMicrophonePermission() async {
+    var status = await Permission.microphone.status;
+    if (status.isGranted) {
+      // 권한이 이미 있을 경우
+      navigateToVoiceInputPage();
+    } else {
+      // 권한 요청
+      status = await Permission.microphone.request();
+      if (status.isGranted) {
+        // 사용자가 권한을 허용했을 경우
+        navigateToVoiceInputPage();
+      } else {
+        // 사용자가 권한을 거부했을 경우
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('마이크 권한이 필요합니다.'),
+          ),
+        );
+      }
+    }
+  }
+
+  void navigateToVoiceInputPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => VoiceInputPage()),
+    );
+  }
 }
+
+
+
