@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memo_re/widgets/calendar2_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:memo_re/providers/postProvider.dart';
+import 'package:memo_re/utils/vars.dart';
 
 class MemoryPage extends StatefulWidget {
   const MemoryPage({super.key});
@@ -24,6 +25,7 @@ class _MemoryPageState extends State<MemoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.backColor(),
       body: Center(
         child: Column(
           children: [

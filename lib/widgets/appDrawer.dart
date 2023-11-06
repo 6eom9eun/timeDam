@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:memo_re/providers/loginProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:memo_re/utils/vars.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Color(0xFFEEEEEE),
+      backgroundColor: AppColors.backColor(),
       child: ListView(
         padding: EdgeInsets.zero,
         children: [

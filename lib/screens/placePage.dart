@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memo_re/utils/vars.dart';
 
 class PlacePage extends StatefulWidget {
   const PlacePage({super.key});
@@ -10,7 +11,8 @@ class PlacePage extends StatefulWidget {
 class _PlacePageState extends State<PlacePage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+      backgroundColor: AppColors.backColor(),
       // 장소 추천 기능 구현
     );
   }

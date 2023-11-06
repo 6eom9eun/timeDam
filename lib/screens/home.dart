@@ -4,6 +4,7 @@ import 'package:memo_re/widgets/postbox_widget.dart';
 import 'package:memo_re/screens/writePage.dart';
 import 'package:provider/provider.dart';
 import 'package:memo_re/providers/loginProvider.dart';
+import 'package:memo_re/utils/vars.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor: AppColors.backColor(),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(

@@ -48,6 +48,7 @@ Widget buildGrid() {
           if (imageUrl == null) {
             return Center(child: Text('이미지를 불러올 수 없습니다.'));
           }
+
           return GestureDetector(
             onTap: () {
               showDialog(

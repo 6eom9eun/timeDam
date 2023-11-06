@@ -180,7 +180,10 @@ class _WritePageState extends State<WritePage> {
 
   @override
   Widget build(BuildContext context) {
+    var statusBarHeight = MediaQuery.of(context).padding.top;
+
     return Scaffold(
+      backgroundColor: AppColors.backColor(),
       appBar: AppBar(
         backgroundColor: Colors.transparent, // 배경색을 투명하게 설정
         elevation: 0, // 그림자 제거
@@ -190,7 +193,7 @@ class _WritePageState extends State<WritePage> {
         child: Align(
           alignment: Alignment.center,
           child: Container(
-            padding: EdgeInsets.all(30),
+            padding: EdgeInsets.all(50),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
