@@ -3,22 +3,19 @@ class WeatherModel {
   final int humidity;
   final String weather;
   final String description;
-  final String name;
 
   WeatherModel.fromJson(Map<String, dynamic> json)
-      : temp = double.parse(json['main']['temp'].toString()),
+      : temp = (json['main']['temp'] as num).toDouble(),
         humidity = json['main']['humidity'],
         weather = json['weather'][0]['main'],
-        description = json['weather'][0]['description'],
-        name = json['name'];
+        description = json['weather'][0]['description'];
 
-  Map<String, Object?> toJson() {
+  Map<String, dynamic> toJson() {
     return {
       'temp': temp,
       'humidity': humidity,
       'weather': weather,
       'description': description,
-      'name': name,
     };
   }
 }
