@@ -2,13 +2,14 @@ import 'package:background_fetch/background_fetch.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 import 'dart:async';
 
+// 모델
 import 'package:memo_re/models/placeModel.dart';
-
-// 상수 정의
-const coordinationUnit = 1800; // 약 50미터를 동일 좌표로 간주
+import 'package:memo_re/models/weatherModel.dart';
 
 // FirebaseAuth와 FirebaseFirestore 인스턴스 초기화
 final FirebaseAuth auth = FirebaseAuth.instance;
@@ -36,21 +37,32 @@ Future<void> initLocationState() async {
 // 위치 데이터를 Firestore에 저장하는 함수
 Future<void> _saveLocation(String uid, String taskId) async {
   try {
-    print("Trying to save location...");
+    print("Trying to save location and weather...");
     Position position = await getLocation(); // 현재 위치 획득
-    // Firestore에 저장할 위치 데이터
-    Map<String, dynamic> locationData = {
-      'timestamp': FieldValue.serverTimestamp(), // 서버 시간 사용
-      'latitude': position.latitude,
-      'longitude': position.longitude,
+
+    // 날씨 정보 획득
+    WeatherModel weather = await getWeather(position.latitude, position.longitude);
+    Map<String, dynamic> weatherData = weather.toJson();
+
+    // Firestore에 저장할 위치 및 날씨 데이터
+    Map<String, dynamic> locationAndWeatherData = {
+      'timestamp': FieldValue.serverTimestamp(), // 서버 시간
+      'location': { // 'location' 필드
+        'latitude': position.latitude,
+        'longitude': position.longitude,
+      },
+      'weather': weatherData,
     };
 
-    // 위치 데이터 Firestore에 저장
-    await firestore.collection('locations').doc(uid).set({uid: locationData});
-    print("Location saved for user $uid with taskId $taskId");
+    // 위치 및 날씨 데이터 Firestore에 저장
+    await firestore.collection('locations').doc(uid).set({
+      uid: locationAndWeatherData
+    }, SetOptions(merge: true));
+    print("Location and weather saved for user $uid with taskId $taskId");
+
 
     // 노인이 좋아할만한 장소 검색 키워드
-    List<String> placeKeywords = ['공원', '도서관', '경로당', '산책로',];
+    List<String> placeKeywords = ['공원', '도서관', '경로당', '산책로'];
     // 주변 장소 검색 후 저장
     List<VisitedPlaceModel> places = await getPlacesKakao(
         placeKeywords, position.latitude, position.longitude);
@@ -58,14 +70,16 @@ Future<void> _saveLocation(String uid, String taskId) async {
     // 검색된 장소들의 리스트를 맵으로 변환
     List<Map<String, dynamic>> placesMap = places.map((place) => place.toJson()).toList();
 
-    // 검색된 장소들의 리스트를 Firestore에 저장
-    await firestore.collection('places').doc(uid).set({
-      'places': placesMap,
-    });
-    print("Places saved for user $uid with taskId $taskId");
+    // 위치, 날씨 데이터 및 검색된 장소들을 Firestore의 같은 문서에 저장
+    await firestore.collection('locations').doc(uid).set({
+      ...locationAndWeatherData, // 기존 위치 및 날씨 데이터
+      'places': placesMap,       // 검색된 장소들의 리스트 추가
+    }, SetOptions(merge: true)); // 'merge: true' 옵션을 사용하여 데이터를 병합
+
+    print("Location, weather, and places saved for user $uid with taskId $taskId");
 
   } catch (e) {
-    print("Failed to save location or places: $e");
+    print("Failed to save location, weather, or places: $e");
   }
 }
 
@@ -142,7 +156,7 @@ Future<List<VisitedPlaceModel>> getPlacesKakao(
   for (final placeName in placeNames) {
     // 검색 URL 생성
     var url = Uri.parse(
-        "$baseUrl?query=$placeName&x=$longitude&y=$latitude&radius=500&sort=distance");
+        "$baseUrl?query=$placeName&x=$longitude&y=$latitude&radius=1300&sort=distance"); // 반경 1.2km, 노인 생활 반경 반영
 
     final dio = Dio();
 
@@ -167,4 +181,18 @@ Future<List<VisitedPlaceModel>> getPlacesKakao(
     }
   }
   return responses;
+}
+
+Future<WeatherModel> getWeather(var latitude, var longitude) async {
+  var key = '09530d1ccfae5c1d0f1d1d82d5027b94'; // 배포 XXXXXXXXXXXXXXXXXXX
+  var baseUrl = "https://api.openweathermap.org/data/2.5/weather";
+  var url = Uri.parse(
+      '$baseUrl?lat=$latitude&lon=$longitude&appid=$key&units=metric&lang=kr');
+  var response = await http.get(url);
+  if (response.statusCode == 200) {
+    var json = await jsonDecode(response.body);
+    return WeatherModel.fromJson(json);
+  } else {
+    throw Exception('${response.statusCode}');
+  }
 }
