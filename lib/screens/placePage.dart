@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:memo_re/utils/vars.dart';
+import 'package:memo_re/widgets/place_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class PlacePage extends StatefulWidget {
@@ -48,6 +49,7 @@ class _PlacePageState extends State<PlacePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.backColor(),
       body: Column(
         children: [
           Container(
@@ -57,11 +59,8 @@ class _PlacePageState extends State<PlacePage> {
           Padding(
             padding: EdgeInsets.all(40.0),
             child: Row(
-              // Main axis alignment is set to start so the circle and the text
-              // are at the start of the row, which is the left side of the screen.
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
-              // Align items vertically center
               children: [
                 Container(
                   decoration: BoxDecoration(
@@ -79,7 +78,6 @@ class _PlacePageState extends State<PlacePage> {
                   padding: EdgeInsets.all(20.0),
                   child: Text(
                     weatherDescription.isEmpty ? "" : weatherDescription,
-                    // Assuming we want just the first letter or icon inside the circle
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 24,
@@ -89,10 +87,9 @@ class _PlacePageState extends State<PlacePage> {
                   ),
                 ),
                 SizedBox(width: 20),
-                // Provides spacing between the circle and the text
-                Expanded( // Ensures text does not overflow
+                Expanded(
                   child: Text(
-                    '추억을 만들으러 가볼까요?',
+                    '추억 만들기 좋은 날씨에요.',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -102,6 +99,11 @@ class _PlacePageState extends State<PlacePage> {
                 ),
               ],
             ),
+          ),
+          Expanded(
+            child: FirebaseAuth.instance.currentUser != null
+                ? buildPlacesList()
+                : Center(child: Text('로그인해 주세요.', style: TextStyle(fontSize: 24))),
           ),
         ],
       ),

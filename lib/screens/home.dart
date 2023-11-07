@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
                           SizedBox(height: 80),
                           CircleAvatar(
                             backgroundImage: NetworkImage(provider.userInformation!.profileUrl),
-                            radius: 40,
+                            radius: 35,
                             backgroundColor: Colors.transparent,
                           ),
                           Text(

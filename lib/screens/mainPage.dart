@@ -14,25 +14,25 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
   List<BottomNavigationBarItem> bottomItems = [
-    BottomNavigationBarItem(
-      label: '홈',
-      icon: Icon(Icons.home_filled, size: 30.0),
-    ),
     BottomNavigationBarItem(
       icon: Icon(Icons.library_books_rounded),
       label: '목록',
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.library_books_rounded),
+      label: '홈',
+      icon: Icon(Icons.home_filled, size: 30.0),
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.star),
       label: '장소',
     ),
   ];
 
   List<Widget> pages = [
-    Home(),
     MemoryPage(),
+    Home(),
     PlacePage(),
   ];
 
