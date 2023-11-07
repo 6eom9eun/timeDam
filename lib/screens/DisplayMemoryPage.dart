@@ -95,7 +95,7 @@ class DisplayMemoryPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.yellow[50],
       appBar: AppBar(
-        backgroundColor: AppColors.primaryColor(), // 앱바의 색상 설정
+        backgroundColor: AppColors.primaryColor(),
         title: Text(
           '추억 생성 완료!',
           style: TextStyle(
@@ -112,69 +112,72 @@ class DisplayMemoryPage extends StatelessWidget {
           },
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.network(imageUrl),
-            SizedBox(height: 15),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20), // 좌우 여백 조절
-              child: Text(
-                memory,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Noto_Sans_KR',
-                  // fontWeight: FontWeight.bold,
-                  color: Colors.black,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.network(imageUrl),
+              SizedBox(height: 15),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  memory,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Noto_Sans_KR',
+                    color: Colors.black,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      await uploadMemoryToFirebase(memory, imageUrl);
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop(); //피드 창으로 이동
-                    } catch (e) {
-                      print('Error uploading memory to Firebase: $e');
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.amber[500],
-                  ),
-                  child: Text('업로드',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'Cafe',
-                      color: Colors.black54,
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await uploadMemoryToFirebase(memory, imageUrl);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      } catch (e) {
+                        print('Error uploading memory to Firebase: $e');
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.amber[500],
+                    ),
+                    child: Text(
+                      '업로드',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Cafe',
+                        color: Colors.black54,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(width: 20), // 업로드 버튼과 공유 버튼 사이의 간격 조절
-                ElevatedButton(
-                  onPressed: () {
-                    _shareApp();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.amber[500],
-                  ),
-                  child: Text('공유',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'Cafe',
-                      color: Colors.black54,
+                  SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      _shareApp();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.amber[500],
+                    ),
+                    child: Text(
+                      '공유',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Cafe',
+                        color: Colors.black54,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
