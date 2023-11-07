@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:memo_re/utils/vars.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'DisplayMemoryPage.dart';
+import 'CreatingPage.dart'; // CreatingPage를 import
 
 class VoiceInputPage extends StatefulWidget {
   @override
@@ -41,7 +46,7 @@ class _VoiceInputPageState extends State<VoiceInputPage> {
       onResult: (result) {
         setState(() {
           inputText = result.recognizedWords;
-          print(inputText); // stt 확인
+          print(inputText); // STT 확인
         });
       },
     );
@@ -53,8 +58,43 @@ class _VoiceInputPageState extends State<VoiceInputPage> {
     super.dispose();
   }
 
+  Future<void> sendTextToServer(String text) async {
+    // CreatingPage로 이동
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreatingPage(),
+      ),
+    );
+
+    // 서버로 데이터를 전송하고 응답을 기다립니다.
+    final response = await http.post(
+      Uri.parse('http://192.168.123.109:5000'), // 플라스크 서버 주소 입력
+      body: {'text': inputText},
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final generatedMemory = data['memory'];
+      final imageUrl = data['image_url'];
+
+      // 데이터를 성공적으로 받아온 후 DisplayMemoryPage로 이동
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DisplayMemoryPage(
+            memory: generatedMemory,
+            imageUrl: imageUrl,
+          ),
+        ),
+      );
+    } else {
+      print('데이터 전송 실패: ${response.statusCode}');
+    }
+  }
+
   @override
-    Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -113,6 +153,22 @@ class _VoiceInputPageState extends State<VoiceInputPage> {
                 color: Color(0xff777777),
               ),
               textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                sendTextToServer(inputText);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryColor(),
+              ),
+              child: Text(
+                '확인',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Cafe',
+                ),
+              ),
             ),
           ],
         ),
