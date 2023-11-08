@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 Widget buildGrid() {
   User? user = FirebaseAuth.instance.currentUser;
@@ -132,6 +133,7 @@ Future<void> _showDeleteConfirmation(BuildContext context, String postId) async 
             child: Text('예'),
             onPressed: () {
               Navigator.of(dialogContext).pop(); // 다이얼로그 닫기
+              Navigator.of(dialogContext).pop();
               _deletePost(context, postId); // 게시물 삭제 함수 호출
             },
           ),
@@ -144,11 +146,27 @@ Future<void> _showDeleteConfirmation(BuildContext context, String postId) async 
 // post 삭제 함수
 Future<void> _deletePost(BuildContext context, String postId) async {
   try {
-    await FirebaseFirestore.instance.collection('posts').doc(postId).delete();
+    // Retrieve the document to get the imageUrl
+    DocumentSnapshot postDocument = await FirebaseFirestore.instance.collection('posts').doc(postId).get();
+    if (postDocument.exists) {
+      var data = postDocument.data() as Map<String, dynamic>;
+      String? imageUrl = data['imageUrl'];
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('게시물이 삭제되었습니다.')),
-    );
+      await FirebaseFirestore.instance.collection('posts').doc(postId).delete();
+
+      if (imageUrl != null && imageUrl.isNotEmpty) {
+        Reference storageReference = FirebaseStorage.instance.refFromURL(imageUrl);
+        await storageReference.delete();
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('게시물이 삭제되었습니다.')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('해당 게시물을 찾을 수 없습니다.')),
+      );
+    }
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('게시물을 삭제하는 중 오류가 발생했습니다.')),
