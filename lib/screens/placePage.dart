@@ -81,6 +81,7 @@ class _PlacePageState extends State<PlacePage> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 24,
+                      fontFamily: 'CafeAir',
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
@@ -91,7 +92,8 @@ class _PlacePageState extends State<PlacePage> {
                   child: Text(
                     '추억 만들기 좋은 날씨에요.',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontFamily: 'CafeAir',
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),

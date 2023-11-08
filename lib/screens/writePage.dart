@@ -239,27 +239,6 @@ class _WritePageState extends State<WritePage> {
                           SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: () {
-                              setState(() {
-                                hasImage = false;
-                                showInputOptions = true;
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primaryColor(),
-                              fixedSize: Size(350, 100),
-                            ),
-                            child: Text(
-                              '추억할 사진을 가지고 있지 않나요?',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Cafe',
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          ElevatedButton(
-                            onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -272,7 +251,7 @@ class _WritePageState extends State<WritePage> {
                               fixedSize: Size(350, 100),
                             ),
                             child: Text(
-                              '테스트 버전',
+                              '추억할 사진을 가지고 있지 않나요?',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontFamily: 'Cafe',

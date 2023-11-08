@@ -34,6 +34,8 @@ Widget buildPlacesList() {
                   title: Text(
                     placeName,
                     style: TextStyle(
+                      fontFamily: 'CafeAir',
+                      fontWeight: FontWeight.bold,
                       fontSize: 24,
                       color: Colors.grey[800], // 여기에서 글씨색을 설정합니다.
                     ),
