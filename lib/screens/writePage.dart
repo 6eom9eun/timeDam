@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:memo_re/screens/InputPage.dart';
 import 'package:memo_re/screens/voicePage.dart';
 import 'package:memo_re/utils/vars.dart';
 import 'package:provider/provider.dart';
@@ -249,6 +250,29 @@ class _WritePageState extends State<WritePage> {
                             ),
                             child: Text(
                               '추억할 사진을 가지고 있지 않나요?',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Cafe',
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TextInputPage(),
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primaryColor(),
+                              fixedSize: Size(350, 100),
+                            ),
+                            child: Text(
+                              '테스트 버전',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontFamily: 'Cafe',
