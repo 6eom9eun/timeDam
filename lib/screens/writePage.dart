@@ -228,7 +228,7 @@ class _WritePageState extends State<WritePage> {
                               fixedSize: Size(350, 100),
                             ),
                             child: Text(
-                              '추억할 사진을 가지고 있나요?',
+                              '추억할 사진이 있으신가요?',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontFamily: 'Cafe',
@@ -251,7 +251,7 @@ class _WritePageState extends State<WritePage> {
                               fixedSize: Size(350, 100),
                             ),
                             child: Text(
-                              '추억할 사진을 가지고 있지 않나요?',
+                              '추억할 만한 사진이 없으신가요?',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontFamily: 'Cafe',

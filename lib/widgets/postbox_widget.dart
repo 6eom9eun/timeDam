@@ -120,7 +120,7 @@ Future<void> _showDeleteConfirmation(BuildContext context, String postId) async 
     builder: (BuildContext dialogContext) {
       return AlertDialog(
         title: Text('게시물 삭제'),
-        content: Text('정말로 삭제하실거에요?'),
+        content: Text('정말로 삭제하시겠습니까?'),
         actions: <Widget>[
           TextButton(
             child: Text('아니오'),
