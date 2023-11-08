@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:memo_re/screens/InputPage.dart';
+import 'package:memo_re/screens/imageInputPage.dart';
 import 'package:memo_re/screens/voicePage.dart';
 import 'package:memo_re/utils/vars.dart';
 import 'package:provider/provider.dart';
@@ -67,7 +68,7 @@ class _WritePageState extends State<WritePage> {
                 print('입력된 텍스트: $inputText');
                 // Navigator.of(context).pop();
 
-                // LandingPage로 이동하여 로딩 화면을 표시
+                // CreatingPage로 이동하여 로딩 화면을 표시
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -218,10 +219,12 @@ class _WritePageState extends State<WritePage> {
                         if (!showInputOptions) ...[
                           ElevatedButton(
                             onPressed: () {
-                              setState(() {
-                                hasImage = true;
-                                showInputOptions = true;
-                              });
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => imageInputPage(),
+                                ),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primaryColor(),
