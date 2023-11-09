@@ -75,14 +75,16 @@ class DisplayMemoryPage extends StatelessWidget {
       final downloadUrl = await snapshot.ref.getDownloadURL();
 
       // 업로드된 이미지의 URL과 함께 Firestore에 업로드
-      final postRef = FirebaseFirestore.instance.collection('posts').doc();
-      await postRef.set({
+      final DocumentReference postDocRef = FirebaseFirestore.instance.collection('user').doc(uid).collection('posts').doc();
+
+      await postDocRef.set({
         'imageUrl': downloadUrl,
         'uid': uid,
         'text': memory,
         'createdAt': FieldValue.serverTimestamp(),
-        'postId': postRef.id,
+        'postId': postDocRef.id,
       });
+
 
       print('Memory uploaded to Firebase Firestore and Storage! Memory: $memory, ImageURL: $downloadUrl');
     } catch (e) {

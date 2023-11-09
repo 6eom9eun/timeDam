@@ -14,8 +14,9 @@ Widget buildGrid() {
 
   return StreamBuilder<QuerySnapshot>(
     stream: FirebaseFirestore.instance
+        .collection('user')
+        .doc(userId)
         .collection('posts')
-        .where('uid', isEqualTo: userId)
         .snapshots(),
     builder: (context, snapshot) {
       if (snapshot.hasError) {
@@ -147,15 +148,29 @@ Future<void> _showDeleteConfirmation(BuildContext context, String postId) async 
 Future<void> _deletePost(BuildContext context, String postId) async {
   try {
     // Retrieve the document to get the imageUrl
-    DocumentSnapshot postDocument = await FirebaseFirestore.instance.collection('posts').doc(postId).get();
+    DocumentSnapshot postDocument = await FirebaseFirestore.instance
+        .collection('user')
+        .doc(FirebaseAuth.instance.currentUser
+        ?.uid) // Ensure you have the correct uid here
+        .collection('posts')
+        .doc(postId)
+        .get();
+
     if (postDocument.exists) {
       var data = postDocument.data() as Map<String, dynamic>;
       String? imageUrl = data['imageUrl'];
 
-      await FirebaseFirestore.instance.collection('posts').doc(postId).delete();
+      await FirebaseFirestore.instance
+          .collection('user')
+          .doc(FirebaseAuth.instance.currentUser
+          ?.uid) // Again, ensure the correct uid
+          .collection('posts')
+          .doc(postId)
+          .delete();
 
       if (imageUrl != null && imageUrl.isNotEmpty) {
-        Reference storageReference = FirebaseStorage.instance.refFromURL(imageUrl);
+        Reference storageReference = FirebaseStorage.instance.refFromURL(
+            imageUrl);
         await storageReference.delete();
       }
 

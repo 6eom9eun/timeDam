@@ -125,10 +125,7 @@ class _WritePageState extends State<WritePage> {
 
   Future uploadFile() async {
     if (_image == null) return;
-    final fileName = _image!
-        .path
-        .split('/')
-        .last;
+    final fileName = _image!.path.split('/').last;
     final destination = 'images/$fileName';
 
     try {
@@ -143,24 +140,23 @@ class _WritePageState extends State<WritePage> {
         return;
       }
 
-      // Firestore에 게시물 정보들을 먼저 저장하지만 postId는 아직 모릅니다.
-      DocumentReference postRef = await FirebaseFirestore.instance.collection(
-          'posts').add({
+      // 사용자의 UID를 사용하여 Firestore에 게시물 정보들을 저장합니다.
+      CollectionReference userPostsRef = FirebaseFirestore.instance.collection('user').doc(uid).collection('posts');
+
+      // Firestore에 새로운 게시물 문서를 추가하고 postId를 저장합니다.
+      DocumentReference postDocRef = await userPostsRef.add({
         'imageUrl': url,
-        'uid': uid,
         'text': _textController.text,
         'createdAt': FieldValue.serverTimestamp(),
+        // 'uid'와 'postId' 필드는 이제 필요 없습니다.
+        // 각 사용자의 'posts' 서브컬렉션 안에 문서들이 저장되기 때문입니다.
       });
 
-      // 생성된 문서 ID(postId)를 가져와서 방금 생성한 문서에 업데이트합니다.
-      String postId = postRef.id;
-      await postRef.update({'postId': postId});
+      // 생성된 문서 ID(postId)를 변수로 저장할 필요가 없습니다.
+      // 필요하다면 `postDocRef.id`를 사용하여 얻을 수 있습니다.
 
-      Provider
-          .of<PostProvider>(context, listen: false)
-          .imageUrl = url;
-      print(
-          'File uploaded to Firebase Storage and Firestore! URL: $url, UID: $uid, PostID: $postId');
+      Provider.of<PostProvider>(context, listen: false).imageUrl = url;
+      print('File uploaded to Firebase Storage and Firestore! URL: $url, UID: $uid, PostID: ${postDocRef.id}');
     } catch (e) {
       print('uploadFile error: $e');
     }
