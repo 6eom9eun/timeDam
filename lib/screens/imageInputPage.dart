@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -22,6 +23,7 @@ class imageInputPage extends StatefulWidget {
   @override
   _imageInputPageState createState() => _imageInputPageState();
 }
+
 class _imageInputPageState extends State<imageInputPage> {
   TextEditingController _textController = TextEditingController();
   final stt.SpeechToText speech = stt.SpeechToText();
@@ -124,8 +126,10 @@ class _imageInputPageState extends State<imageInputPage> {
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
+        hasImage = true; // 이미지가 선택되었음을 표시
       } else {
         print('No image selected.');
+        hasImage = false; // 이미지가 선택되지 않았음을 표시
       }
     });
   }
@@ -145,24 +149,30 @@ class _imageInputPageState extends State<imageInputPage> {
                   Image.asset('assets/logo.png', width: 80, height: 80),
                   SizedBox(height: 20),
                   Text(
-                    '추억용 사진을 올려주세요!',
+                    '추억할 사진을 올려주세요!',
                     style: TextStyle(
                       fontSize: 30,
                       fontFamily: 'Cafe',
                     ),
                     textAlign: TextAlign.center,
                   ),
-
-                  // Text(
-                  //   '음성인식 중입니다..',
-                  //   style: TextStyle(
-                  //     fontFamily: 'CafeAir',
-                  //     fontSize: 18,
-                  //     color: Color(0xff777777),
-                  //   ),
-                  //   textAlign: TextAlign.center,
-                  // ),
-                  SizedBox(height: 100),
+                  SizedBox(height: 50),
+                  Container(
+                    height: 300,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: hasImage
+                        ? Image.file(_image!, fit: BoxFit.cover)
+                        : Center(
+                      child: Text(
+                        '이미지를 선택하세요',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: getImage,
                     style: ElevatedButton.styleFrom(

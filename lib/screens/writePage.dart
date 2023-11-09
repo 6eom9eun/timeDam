@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:memo_re/screens/InputPage.dart';
-import 'package:memo_re/screens/imageInputPage.dart';
+import 'package:memo_re/screens/ImageInputPage.dart';
 import 'package:memo_re/screens/voicePage.dart';
 import 'package:memo_re/utils/vars.dart';
 import 'package:provider/provider.dart';
