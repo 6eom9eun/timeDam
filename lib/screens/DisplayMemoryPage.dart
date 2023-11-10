@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:memo_re/screens/mainPage.dart';
 import 'package:memo_re/utils/vars.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
@@ -140,12 +141,13 @@ class DisplayMemoryPage extends StatelessWidget {
                     onPressed: () async {
                       try {
                         await uploadMemoryToFirebase(memory, imageUrl);
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
                       } catch (e) {
                         print('Error uploading memory to Firebase: $e');
                       }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainPage()),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.amber[500],
