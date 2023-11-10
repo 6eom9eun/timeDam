@@ -5,9 +5,14 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 Widget buildGrid() {
   User? user = FirebaseAuth.instance.currentUser;
-
   if (user == null) {
-    return Center(child: Text('로그인을 해주세요.'));
+    return Center(child: Text(
+        '로그인 해주세요',
+      style: TextStyle(
+        fontFamily: 'CafeAir',
+        fontSize: 15,
+        color: Colors.black,
+      ),));
   }
 
   String userId = user.uid;

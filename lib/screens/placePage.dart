@@ -35,12 +35,12 @@ class _PlacePageState extends State<PlacePage> {
         });
       } catch (e) {
         setState(() {
-          weatherDescription = 'Failed to fetch weather data';
+          weatherDescription = 'error'; //Failed to fetch weather data
         });
       }
     } else {
       setState(() {
-        weatherDescription = 'User not logged in';
+        weatherDescription = 'error'; //User not logged in
       });
     }
   }
@@ -105,7 +105,12 @@ class _PlacePageState extends State<PlacePage> {
           Expanded(
             child: FirebaseAuth.instance.currentUser != null
                 ? buildPlacesList()
-                : Center(child: Text('로그인해 주세요.', style: TextStyle(fontSize: 24))),
+                : Center(child: Text(
+                '로그인 해주세요.',
+                style: TextStyle(
+                    fontFamily: 'CafeAir',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24))),
           ),
         ],
       ),
