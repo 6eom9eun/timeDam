@@ -85,7 +85,7 @@ class _imageInputPageState extends State<imageInputPage> {
     super.dispose();
   }
 
-  Future<void> sendTextToServer(String text) async {
+  Future<void> sendTextToServer(String inputText) async {
     // CreatingPage로 이동
     Navigator.push(
       context,
@@ -96,7 +96,7 @@ class _imageInputPageState extends State<imageInputPage> {
 
     // 서버로 데이터를 전송하고 응답을 기다립니다.
     final response = await http.post(
-      Uri.parse('http://192.168.123.109:5000'), // 플라스크 서버 주소 입력
+      Uri.parse('http://192.168.123.111:5000'), // 플라스크 서버 주소 입력
       body: {'text': inputText},
     );
 
