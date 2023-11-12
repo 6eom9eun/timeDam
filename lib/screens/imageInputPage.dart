@@ -86,8 +86,7 @@ class _imageInputPageState extends State<imageInputPage> {
     super.dispose();
   }
 
-  Future sendTextToServer(String inputText) async {
-    print('Input text: $inputText');
+  Future<void> sendTextAndImageToServer(String inputText, File imageFile) async {
     // CreatingPage로 이동
     Navigator.push(
       context,
@@ -96,31 +95,54 @@ class _imageInputPageState extends State<imageInputPage> {
       ),
     );
 
-    // 서버로 데이터를 전송하고 응답을 기다립니다.
-    final response = await http.post(
-      Uri.parse('http://192.168.123.102:5000'), // 플라스크 서버 주소 입력
-      body: {'text': inputText},
+    // 멀티파트 요청을 생성합니다.
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('http://192.168.123.102:5000'),
     );
 
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      final generatedMemory = data['memory'];
-      final imageUrl = data['image_url'];
+    // 텍스트 데이터를 추가합니다.
+    request.fields['text'] = inputText;
+    print('Input text: $inputText');
 
-      // 데이터를 성공적으로 받아온 후 DisplayMemoryPage로 이동
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DisplayMemoryPage(
-            memory: generatedMemory,
-            imageUrl: imageUrl,
+    // 이미지 파일을 추가합니다.
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'image', // 서버에서 이미지를 받을 때 사용할 키
+        imageFile.path,
+        contentType: MediaType('image', 'jpeg'), // 이미지 타입에 따라 수정
+      ),
+    );
+
+    // 요청을 보내고 응답을 기다립니다.
+    try {
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        final data = await response.stream.bytesToString();
+        final decodedData = json.decode(data);
+
+        final generatedMemory = decodedData['memory'];
+        final imageUrl = decodedData['image_url'];
+
+        // 데이터를 성공적으로 받아온 후 DisplayMemoryPage로 이동
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DisplayMemoryPage(
+              memory: generatedMemory,
+              imageUrl: imageUrl,
+            ),
           ),
-        ),
-      );
-    } else {
-      print('데이터 전송 실패: ${response.statusCode}');
+        );
+      } else {
+        print('데이터 전송 실패: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('에러 발생: $error');
     }
   }
+
 
   Future getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -217,7 +239,7 @@ class _imageInputPageState extends State<imageInputPage> {
                   ElevatedButton(
                     onPressed: () {
                       String inputText = _textController.text;
-                      sendTextToServer(inputText);
+                      sendTextAndImageToServer(inputText,_image!);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryColor(),
