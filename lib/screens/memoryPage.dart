@@ -25,7 +25,6 @@ class _MemoryPageState extends State<MemoryPage> {
     _fetchPosts(_selectedDay); // 초기화할 때 오늘 날짜의 게시물을 가져옵니다.
   }
 
-  // 이제 _fetchPosts는 특정 날짜의 게시물만 가져옵니다.
   void _fetchPosts(DateTime date) async {
     String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
     DateTime dateKey = DateTime(date.year, date.month, date.day);
@@ -135,46 +134,53 @@ class _MemoryPageState extends State<MemoryPage> {
         return Dialog(
           backgroundColor: AppColors.backColor(),
           // 다이얼로그의 UI 구성
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      (post['createdAt'] as Timestamp).toDate().toString(),
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    if (post['imageUrl'] != null)
-                      Image.network(
-                        post['imageUrl'],
-                        fit: BoxFit.cover,
-                        width: 200,
-                        height: 200,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(Icons.error);
-                        },
+          child: SingleChildScrollView( // 스크롤 가능한 다이얼로그 생성
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        (post['createdAt'] as Timestamp).toDate().toString(),
+                        style: TextStyle(fontSize: 14),
                       ),
-                    Text(post['text'] ?? 'No Content',
-                        style: TextStyle(fontSize: 18)),
-                  ],
+                      if (post['imageUrl'] != null)
+                        Image.network(
+                          post['imageUrl'],
+                          fit: BoxFit.cover,
+                          width: 200,
+                          height: 200,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Icon(Icons.error);
+                          },
+                        ),
+                      // 스크롤 가능한 텍스트를 위한 SingleChildScrollView 추가
+                      SingleChildScrollView(
+                        child: Text(
+                          post['text'] ?? 'No Content',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 16),
-              // 닫기 버튼 추가
-              ElevatedButton(
-                onPressed: () {
-                  // 다이얼로그 닫기
-                  Navigator.of(context).pop();
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: AppColors.primaryColor(),
+                SizedBox(height: 16),
+                // 닫기 버튼 추가
+                ElevatedButton(
+                  onPressed: () {
+                    // 다이얼로그 닫기
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: AppColors.primaryColor(),
+                  ),
+                  child: Text('닫기'),
                 ),
-                child: Text('닫기'),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
