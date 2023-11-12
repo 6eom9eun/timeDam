@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memo_re/utils/vars.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -86,18 +87,24 @@ Widget buildGrid() {
                         ),
                       ),
                       actions: <Widget>[
-                        TextButton(
-                          child: Text('삭제'),
+                        ElevatedButton(
                           onPressed: () {
-                            // 삭제 확인 다이얼로그를 띄웁니다.
                             _showDeleteConfirmation(context, postId);
                           },
+                          style: ElevatedButton.styleFrom(
+                            primary: AppColors.primaryColor(),
+                          ),
+                          child: Text('삭제'),
                         ),
-                        TextButton(
-                          child: Text('닫기'),
+                        ElevatedButton(
                           onPressed: () {
+                            // 다이얼로그 닫기
                             Navigator.of(context).pop();
                           },
+                          style: ElevatedButton.styleFrom(
+                            primary: AppColors.primaryColor(),
+                          ),
+                          child: Text('닫기'),
                         ),
                       ],
                     );
@@ -138,19 +145,25 @@ Future<void> _showDeleteConfirmation(BuildContext context, String postId) async 
         title: Text('게시물 삭제'),
         content: Text('정말로 삭제하시겠습니까?'),
         actions: <Widget>[
-          TextButton(
-            child: Text('아니오'),
+          ElevatedButton(
             onPressed: () {
-              Navigator.of(dialogContext).pop(); // 다이얼로그 닫기
+              Navigator.of(context).pop();
             },
+            style: ElevatedButton.styleFrom(
+              primary: AppColors.primaryColor(),
+            ),
+            child: Text('아니오'),
           ),
-          TextButton(
-            child: Text('예'),
+          ElevatedButton(
             onPressed: () {
               Navigator.of(dialogContext).pop(); // 다이얼로그 닫기
               Navigator.of(dialogContext).pop();
               _deletePost(context, postId); // 게시물 삭제 함수 호출
             },
+            style: ElevatedButton.styleFrom(
+              primary: AppColors.primaryColor(),
+            ),
+            child: Text('예'),
           ),
         ],
       );
