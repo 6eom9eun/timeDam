@@ -8,6 +8,7 @@ import 'package:memo_re/screens/DisplayMemoryPage.dart';
 import 'package:memo_re/utils/vars.dart';
 import 'CreatingPage.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+// import 'package:http_parser/http_parser.dart' show MediaType;
 
 class PostProviderModel with ChangeNotifier {
   String? _imageUrl;
@@ -55,7 +56,7 @@ class _imageInputPageState extends State<imageInputPage> {
       );
       if (available) {
         setState(() => _speechInitialized = true);
-        startListening();
+        // startListening();
       } else {
         setState(() => _speechInitialized = false);
       }
@@ -86,6 +87,7 @@ class _imageInputPageState extends State<imageInputPage> {
   }
 
   Future<void> sendTextToServer(String inputText) async {
+    print('Input text: $inputText');
     // CreatingPage로 이동
     Navigator.push(
       context,
@@ -96,7 +98,7 @@ class _imageInputPageState extends State<imageInputPage> {
 
     // 서버로 데이터를 전송하고 응답을 기다립니다.
     final response = await http.post(
-      Uri.parse('http://192.168.123.111:5000'), // 플라스크 서버 주소 입력
+      Uri.parse('http://192.168.123.102:5000'), // 플라스크 서버 주소 입력
       body: {'text': inputText},
     );
 
@@ -173,13 +175,28 @@ class _imageInputPageState extends State<imageInputPage> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: getImage,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryColor(),
-                      foregroundColor: Colors.black,
-                    ),
-                    child: Icon(Icons.image, size: 50,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: getImage,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primaryColor(),
+                          minimumSize: Size(180, 45),
+                        ),
+                        child: Icon(Icons.image, size: 40,),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          startListening(); // 음성인식 시작
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primaryColor(),
+                          minimumSize: Size(180, 45),
+                        ),
+                        child: Icon(Icons.mic, size: 40,),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 20),
                   TextField(
@@ -203,6 +220,7 @@ class _imageInputPageState extends State<imageInputPage> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryColor(),
+                      minimumSize: Size(100, 45),
                     ),
                     child: Text(
                       '확인',

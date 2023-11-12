@@ -70,6 +70,7 @@ class _TextInputPageState extends State<TextInputPage> {
   }
 
   Future<void> sendTextToServer(String inputText) async {
+    print('Input text: $inputText');
     // CreatingPage로 이동
     Navigator.push(
       context,
@@ -80,7 +81,7 @@ class _TextInputPageState extends State<TextInputPage> {
 
     // 서버로 데이터를 전송하고 응답을 기다립니다.
     final response = await http.post(
-      Uri.parse('http://192.168.123.111:5000'), // 플라스크 서버 주소 입력
+      Uri.parse('http://192.168.123.102:5000'), // 플라스크 서버 주소 입력
       body: {'text': inputText},
     );
 
@@ -136,15 +137,6 @@ class _TextInputPageState extends State<TextInputPage> {
                       ),
                     ],
                   ),
-                  // Text(
-                  //   '음성인식 중입니다..',
-                  //   style: TextStyle(
-                  //     fontFamily: 'CafeAir',
-                  //     fontSize: 18,
-                  //     color: Color(0xff777777),
-                  //   ),
-                  //   textAlign: TextAlign.center,
-                  // ),
                   SizedBox(height: 100),
                   TextField(
                     controller: _textController,
