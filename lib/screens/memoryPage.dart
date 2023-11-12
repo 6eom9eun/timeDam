@@ -101,12 +101,16 @@ class _MemoryPageState extends State<MemoryPage> {
                         },
                       )
                           : null,
+                      onTap: () {
+                        // 게시물을 눌렀을 때 다이얼로그로 게시글 표시
+                        _showPostDialog(event);
+                      },
                     ),
                   );
                 },
               )
                   : Center(
-                child: Text('No events found for this day.'),
+                child: Text('추억을 기록한 날이 아니에요.'),
               ),
             ),
           ],
@@ -114,4 +118,39 @@ class _MemoryPageState extends State<MemoryPage> {
       ),
     );
   }
+
+  void _showPostDialog(Map<String, dynamic> post) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          // 다이얼로그의 UI 구성
+          child: Container(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  (post['createdAt'] as Timestamp).toDate().toString(),
+                  style: TextStyle(fontSize: 14),
+                ),
+                if (post['imageUrl'] != null)
+                  Image.network(
+                    post['imageUrl'],
+                    fit: BoxFit.cover,
+                    width: 200,
+                    height: 200,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(Icons.error);
+                    },
+                  ),
+                Text(post['text'] ?? 'No Content', style: TextStyle(fontSize: 18)),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 }
