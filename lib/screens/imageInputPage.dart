@@ -98,7 +98,7 @@ class _imageInputPageState extends State<imageInputPage> {
     // 멀티파트 요청을 생성합니다.
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://192.168.123.102:5000'),
+      Uri.parse('http://192.168.123.107:5000'),
     );
 
     // 텍스트 데이터를 추가합니다.
