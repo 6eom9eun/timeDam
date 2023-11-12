@@ -34,8 +34,10 @@ class _MemoryPageState extends State<MemoryPage> {
           .collection('user')
           .doc(userId)
           .collection('posts')
-          .where('createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(dateKey))
-          .where('createdAt', isLessThan: Timestamp.fromDate(dateKey.add(Duration(days: 1))))
+          .where(
+          'createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(dateKey))
+          .where('createdAt',
+          isLessThan: Timestamp.fromDate(dateKey.add(Duration(days: 1))))
           .get();
 
       List<dynamic> newEvents = [];
@@ -57,7 +59,8 @@ class _MemoryPageState extends State<MemoryPage> {
   void _onDaySelected(DateTime selectedDay) {
     setState(() {
       _selectedDay = selectedDay;
-      _focusedDay = selectedDay; // You may still want to update _focusedDay if necessary
+      _focusedDay =
+          selectedDay; // You may still want to update _focusedDay if necessary
       _selectedEvents = _events[selectedDay] ?? [];
     });
     _fetchPosts(selectedDay); // Fetch posts for the selected day
@@ -85,26 +88,32 @@ class _MemoryPageState extends State<MemoryPage> {
                 itemBuilder: (context, index) {
                   final event = _selectedEvents[index];
                   return Card(
-                    child: ListTile(
-                      title: Text(event['text'] ?? 'No Content'),
-                      subtitle: Text(
-                        (event['createdAt'] as Timestamp).toDate().toString(),
-                      ),
-                      trailing: event['imageUrl'] != null
-                          ? Image.network(
-                        event['imageUrl'],
-                        fit: BoxFit.cover,
-                        width: 100,
-                        height: 100,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(Icons.error);
+                    child: Container(
+                      color: AppColors.primaryColor(),
+                      child: ListTile(
+                        title: Text(
+                          event['text'] ?? 'No Content',
+                          maxLines: 2, // 최대 2줄
+                          overflow: TextOverflow.ellipsis, // 길어질 경우 생략 부호(...)
+                        ),
+                        subtitle: Text(
+                          (event['createdAt'] as Timestamp).toDate().toString(),
+                        ),
+                        trailing: event['imageUrl'] != null
+                            ? Image.network(
+                          event['imageUrl'],
+                          fit: BoxFit.cover,
+                          width: 60,
+                          height: 60,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Icon(Icons.error);
+                          },
+                        )
+                            : null,
+                        onTap: () {
+                          _showPostDialog(event);
                         },
-                      )
-                          : null,
-                      onTap: () {
-                        // 게시물을 눌렀을 때 다이얼로그로 게시글 표시
-                        _showPostDialog(event);
-                      },
+                      ),
                     ),
                   );
                 },
@@ -124,33 +133,51 @@ class _MemoryPageState extends State<MemoryPage> {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
+          backgroundColor: AppColors.backColor(),
           // 다이얼로그의 UI 구성
-          child: Container(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  (post['createdAt'] as Timestamp).toDate().toString(),
-                  style: TextStyle(fontSize: 14),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      (post['createdAt'] as Timestamp).toDate().toString(),
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    if (post['imageUrl'] != null)
+                      Image.network(
+                        post['imageUrl'],
+                        fit: BoxFit.cover,
+                        width: 200,
+                        height: 200,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(Icons.error);
+                        },
+                      ),
+                    Text(post['text'] ?? 'No Content',
+                        style: TextStyle(fontSize: 18)),
+                  ],
                 ),
-                if (post['imageUrl'] != null)
-                  Image.network(
-                    post['imageUrl'],
-                    fit: BoxFit.cover,
-                    width: 200,
-                    height: 200,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Icon(Icons.error);
-                    },
-                  ),
-                Text(post['text'] ?? 'No Content', style: TextStyle(fontSize: 18)),
-              ],
-            ),
+              ),
+              SizedBox(height: 16),
+              // 닫기 버튼 추가
+              ElevatedButton(
+                onPressed: () {
+                  // 다이얼로그 닫기
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: AppColors.primaryColor(),
+                ),
+                child: Text('닫기'),
+              ),
+            ],
           ),
         );
       },
     );
   }
-
 }
