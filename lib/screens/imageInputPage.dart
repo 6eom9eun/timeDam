@@ -8,7 +8,7 @@ import 'package:memo_re/screens/DisplayMemoryPage.dart';
 import 'package:memo_re/utils/vars.dart';
 import 'CreatingPage.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-// import 'package:http_parser/http_parser.dart' show MediaType;
+import 'package:http_parser/http_parser.dart' show MediaType;
 
 class PostProviderModel with ChangeNotifier {
   String? _imageUrl;
@@ -86,7 +86,7 @@ class _imageInputPageState extends State<imageInputPage> {
     super.dispose();
   }
 
-  Future<void> sendTextToServer(String inputText) async {
+  Future sendTextToServer(String inputText) async {
     print('Input text: $inputText');
     // CreatingPage로 이동
     Navigator.push(
@@ -216,6 +216,7 @@ class _imageInputPageState extends State<imageInputPage> {
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
+                      String inputText = _textController.text;
                       sendTextToServer(inputText);
                     },
                     style: ElevatedButton.styleFrom(

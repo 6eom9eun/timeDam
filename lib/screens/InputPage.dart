@@ -69,7 +69,7 @@ class _TextInputPageState extends State<TextInputPage> {
     super.dispose();
   }
 
-  Future<void> sendTextToServer(String inputText) async {
+  Future sendTextToServer(String inputText) async {
     print('Input text: $inputText');
     // CreatingPage로 이동
     Navigator.push(
@@ -155,6 +155,7 @@ class _TextInputPageState extends State<TextInputPage> {
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
+                      String inputText = _textController.text;
                       sendTextToServer(inputText);
                     },
                     style: ElevatedButton.styleFrom(
