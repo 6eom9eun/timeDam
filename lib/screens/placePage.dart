@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:memo_re/utils/vars.dart';
 import 'package:memo_re/widgets/place_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 
 class PlacePage extends StatefulWidget {
   const PlacePage({super.key});
@@ -66,7 +66,6 @@ class _PlacePageState extends State<PlacePage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,44 +83,43 @@ class _PlacePageState extends State<PlacePage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 if (weatherIcon == '01d') // clear sky
-                  SvgPicture.asset('assets/svg/clear-day.svg', width: 80, height: 80),
+                  Lottie.asset('assets/lottie/clear-day.json', width: 100, height: 100),
                 if (weatherIcon == '01n') // clear sky
-                  SvgPicture.asset('assets/svg/clear-night.svg', width: 80, height: 80),
+                  Lottie.asset('assets/lottie/clear-night.json', width: 100, height: 100),
                 if (weatherIcon == '02d') // few clouds
-                  SvgPicture.asset('assets/svg/partly-cloudy-day.svg', width: 80, height: 80),
+                  Lottie.asset('assets/svg/partly-cloudy-day.json', width: 100, height: 100),
                 if (weatherIcon == '02n') // few clouds
-                  SvgPicture.asset('assets/svg/partly-cloudy-night.svg', width: 80, height: 80),
+                  Lottie.asset('assets/svg/partly-cloudy-night.json', width: 100, height: 100),
                 if (weatherIcon == '03d' || weatherIcon == '03n') // 	scattered clouds
-                  SvgPicture.asset('assets/svg/partly-cloudy-night.svg', width: 80, height: 80),
+                  Lottie.asset('assets/svg/partly-cloudy-night.json', width: 100, height: 100),
                 if (weatherIcon == '04d') // broken clouds
-                  SvgPicture.asset('assets/svg/extreme-day.svg', width: 80, height: 80),
+                  Lottie.asset('assets/svg/extreme-day.json', width: 100, height: 100),
                 if (weatherIcon == '04n') // broken clouds
-                  SvgPicture.asset('assets/svg/extreme-night.svg', width: 80, height: 80),
+                  Lottie.asset('assets/svg/extreme-night.json', width: 100, height: 100),
                 if (weatherIcon == '09d') // shower rain
-                  SvgPicture.asset('assets/svg/extreme-rain.svg', width: 80, height: 80),
+                  Lottie.asset('assets/svg/extreme-rain.json', width: 100, height: 100),
                 if (weatherIcon == '09n') // shower rain
-                  SvgPicture.asset('assets/svg/extreme-night-rain.svg', width: 80, height: 80),
+                  Lottie.asset('assets/svg/extreme-night-rain.json', width: 100, height: 100),
                 if (weatherIcon == '10d') // rain
-                  SvgPicture.asset('assets/svg/overcast-day-rain.svg', width: 80, height: 80),
+                  Lottie.asset('assets/svg/overcast-day-rain.json', width: 100, height: 100),
                 if (weatherIcon == '10n') // rain
-                  SvgPicture.asset('assets/svg/overcast-night-rain.svg', width: 80, height: 80),
+                  Lottie.asset('assets/svg/overcast-night-rain.json', width: 100, height: 100),
                 if (weatherIcon == '11d') // thunderstorm
-                  SvgPicture.asset('assets/svg/thunderstorms-extreme.svg', width: 80, height: 80),
+                  Lottie.asset('assets/svg/thunderstorms-extreme.json', width: 100, height: 100),
                 if (weatherIcon == '11n') // thunderstorm
-                  SvgPicture.asset('assets/svg/thunderstorms-night-extreme.svg', width: 80, height: 80),
+                  Lottie.asset('assets/svg/thunderstorms-night-extreme.json', width: 100, height: 100),
                 if (weatherIcon == '13d' || weatherIcon == '13n') // snow
-                  SvgPicture.asset('assets/svg/snow.svg', width: 80, height: 80),
+                  Lottie.asset('assets/svg/snow.json', width: 100, height: 100),
                 if (weatherIcon == '50d' || weatherIcon == '50n') // mist
-                  SvgPicture.asset('assets/svg/mist.svg', width: 80, height: 80),
+                  Lottie.asset('assets/svg/mist.json', width: 100, height: 100),
                 SizedBox(width: 20),
                 Expanded(
                   child: Text(weatherText[weatherIcon] ?? '',
                     softWrap: true, // 줄바꿈 활성화
                     style: TextStyle(
                       fontFamily: 'CafeAir',
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      fontSize: 20,
+                      color: Colors.black87,
                     ),
                   ),
                 ),
@@ -136,8 +134,7 @@ class _PlacePageState extends State<PlacePage> {
                 '로그인 해주세요.',
                 style: TextStyle(
                   fontFamily: 'CafeAir',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
+                  fontSize: 20,
                 ),
               ),
             ),
