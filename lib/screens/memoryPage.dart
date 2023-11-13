@@ -118,7 +118,7 @@ class _MemoryPageState extends State<MemoryPage> {
                 },
               )
                   : Center(
-                child: Text('추억을 기록한 날이 아니에요.'),
+                child: Text('기록된 추억이 없습니다.'),
               ),
             ),
           ],

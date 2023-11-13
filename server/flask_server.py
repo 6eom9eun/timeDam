@@ -206,23 +206,3 @@ def generate_image_from_memory(trans):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-    
-"""###결과"""
-
-#이미지 없을 때
-
-# image_path = ''  # 이미지 파일의 경로
-
-# metadata = get_image_metadata(image_path)
-
-
-# 이미지 설명 생성 함수 호출
-# image_description = generate_image_description(image_path)
-
-    
-# generate_memory 함수 호출
-# memory = generate_memory(metadata,image_description,text)
-
-# translate = translate_to_english(memory)
-
-# image_url = generate_image_from_memory(translate)
