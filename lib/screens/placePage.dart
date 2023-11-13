@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:memo_re/utils/vars.dart';
 import 'package:memo_re/widgets/place_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class PlacePage extends StatefulWidget {
   const PlacePage({super.key});
@@ -13,6 +14,7 @@ class PlacePage extends StatefulWidget {
 
 class _PlacePageState extends State<PlacePage> {
   String weatherDescription = '';
+  String weatherIcon = '';
 
   @override
   void initState() {
@@ -32,10 +34,13 @@ class _PlacePageState extends State<PlacePage> {
         setState(() {
           weatherDescription =
               data['location']['weather']['description'] ?? 'No description';
+          weatherIcon = data['location']['weather']['icon'] ?? '';
         });
       } catch (e) {
         setState(() {
           weatherDescription = 'error'; //Failed to fetch weather data
+          weatherIcon = '';
+
         });
       }
     } else {
@@ -57,40 +62,47 @@ class _PlacePageState extends State<PlacePage> {
             color: Colors.transparent,
           ),
           Padding(
-            padding: EdgeInsets.all(40.0),
+            padding: EdgeInsets.all(30.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.primaryColor(),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  padding: EdgeInsets.all(20.0),
-                  child: Text(
-                    weatherDescription.isEmpty ? "" : weatherDescription,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontFamily: 'CafeAir',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
+                if (weatherIcon == '01d')
+                  SvgPicture.asset('assets/svg/clear-day.svg', width: 80, height: 80),
+                if (weatherIcon == '01n')
+                  SvgPicture.asset('assets/svg/clear-night.svg', width: 80, height: 80),
+                if (weatherIcon == '02d')
+                  SvgPicture.asset('assets/svg/partly-cloudy-day.svg', width: 80, height: 80),
+                if (weatherIcon == '02n')
+                  SvgPicture.asset('assets/svg/partly-cloudy-night.svg', width: 80, height: 80),
+                if (weatherIcon == '03d' || weatherIcon == '03n')
+                  SvgPicture.asset('assets/svg/partly-cloudy-night.svg', width: 80, height: 80),
+                if (weatherIcon == '04d')
+                  SvgPicture.asset('assets/svg/extreme-day.svg', width: 80, height: 80),
+                if (weatherIcon == '04n')
+                  SvgPicture.asset('assets/svg/extreme-night.svg', width: 80, height: 80),
+                if (weatherIcon == '09d')
+                  SvgPicture.asset('assets/svg/extreme-rain.svg', width: 80, height: 80),
+                if (weatherIcon == '09n')
+                  SvgPicture.asset('assets/svg/extreme-night-rain.svg', width: 80, height: 80),
+                if (weatherIcon == '10d')
+                  SvgPicture.asset('assets/svg/overcast-day-rain.svg', width: 80, height: 80),
+                if (weatherIcon == '10n')
+                  SvgPicture.asset('assets/svg/overcast-night-rain.svg', width: 80, height: 80),
+                if (weatherIcon == '11d')
+                  SvgPicture.asset('assets/svg/thunderstorms-extreme.svg', width: 80, height: 80),
+                if (weatherIcon == '11n')
+                  SvgPicture.asset('assets/svg/thunderstorms-night-extreme.svg', width: 80, height: 80),
+                if (weatherIcon == '13d' || weatherIcon == '13n')
+                  SvgPicture.asset('assets/svg/snow.svg', width: 80, height: 80),
+                if (weatherIcon == '50d' || weatherIcon == '50n')
+                  SvgPicture.asset('assets/svg/mist.svg', width: 80, height: 80),
                 SizedBox(width: 20),
                 Expanded(
                   child: Text(
-                    '추억 만들기 좋은 날씨에요.',
+                    weatherDescription.isEmpty
+                        ? "날씨 정보 없음"
+                        : weatherDescription,
                     style: TextStyle(
                       fontFamily: 'CafeAir',
                       fontSize: 18,
@@ -105,12 +117,16 @@ class _PlacePageState extends State<PlacePage> {
           Expanded(
             child: FirebaseAuth.instance.currentUser != null
                 ? buildPlacesList()
-                : Center(child: Text(
+                : Center(
+              child: Text(
                 '로그인 해주세요.',
                 style: TextStyle(
-                    fontFamily: 'CafeAir',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24))),
+                  fontFamily: 'CafeAir',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                ),
+              ),
+            ),
           ),
         ],
       ),
