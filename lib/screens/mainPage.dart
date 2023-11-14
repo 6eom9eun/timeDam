@@ -17,7 +17,7 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 1;
   List<BottomNavigationBarItem> bottomItems = [
     BottomNavigationBarItem(
-      icon: Icon(Icons.library_books_rounded),
+      icon: Icon(Icons.calendar_month),
       label: '목록',
     ),
     BottomNavigationBarItem(
@@ -25,7 +25,7 @@ class _MainPageState extends State<MainPage> {
       icon: Icon(Icons.home_filled, size: 30.0),
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.star),
+      icon: Icon(Icons.place),
       label: '장소',
     ),
   ];

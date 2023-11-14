@@ -16,7 +16,7 @@ class MemoryPage extends StatefulWidget {
 class _MemoryPageState extends State<MemoryPage> {
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
-  Map<DateTime, List<dynamic>> _events = {};
+  Map<DateTime, List<dynamic>> _events = {}; // 날짜별 이벤트를 저장할 맵
   List<dynamic> _selectedEvents = [];
 
   @override
@@ -27,42 +27,41 @@ class _MemoryPageState extends State<MemoryPage> {
 
   void _fetchPosts(DateTime date) async {
     String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
-    DateTime dateKey = DateTime(date.year, date.month, date.day);
+    DateTime startDate = DateTime(date.year, date.month, date.day).toUtc(); // UTC로 변환
+    DateTime endDate = DateTime(date.year, date.month, date.day, 23, 59, 59).toUtc(); // 하루의 마지막 시간으로 설정 및 UTC로 변환
+
     try {
       var querySnapshot = await FirebaseFirestore.instance
           .collection('user')
           .doc(userId)
           .collection('posts')
-          .where(
-          'createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(dateKey))
-          .where('createdAt',
-          isLessThan: Timestamp.fromDate(dateKey.add(Duration(days: 1))))
+          .where('createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
+          .where('createdAt', isLessThanOrEqualTo: Timestamp.fromDate(endDate))
           .get();
 
       List<dynamic> newEvents = [];
       for (var doc in querySnapshot.docs) {
         newEvents.add(doc.data());
       }
+
       if (mounted) {
         setState(() {
-          _events[dateKey] = newEvents;
+          _events[date] = newEvents; // 날짜를 UTC로 변환하지 않음
           _selectedEvents = newEvents;
         });
       }
     } catch (e) {
-      // Handle any errors here
-      print(e);
+      print(e); // 오류 출력
     }
   }
 
   void _onDaySelected(DateTime selectedDay) {
     setState(() {
       _selectedDay = selectedDay;
-      _focusedDay =
-          selectedDay; // You may still want to update _focusedDay if necessary
+      _focusedDay = selectedDay; // 포커스된 날짜 업데이트
       _selectedEvents = _events[selectedDay] ?? [];
     });
-    _fetchPosts(selectedDay); // Fetch posts for the selected day
+    _fetchPosts(selectedDay); // 선택된 날짜의 게시물 가져오기
   }
 
   @override
@@ -76,9 +75,8 @@ class _MemoryPageState extends State<MemoryPage> {
             Calendar2(
               focusedDay: _focusedDay,
               selectedDay: _selectedDay,
-              onDaySelected: (selectedDay) {
-                _onDaySelected(selectedDay);
-              },
+              onDaySelected: _onDaySelected,
+              eventLoader: _getEventsForDay, // 이벤트 로더 추가
             ),
             Expanded(
               child: _selectedEvents.isNotEmpty
@@ -92,8 +90,8 @@ class _MemoryPageState extends State<MemoryPage> {
                       child: ListTile(
                         title: Text(
                           event['text'] ?? 'No Content',
-                          maxLines: 2, // 최대 2줄
-                          overflow: TextOverflow.ellipsis, // 길어질 경우 생략 부호(...)
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         subtitle: Text(
                           (event['createdAt'] as Timestamp).toDate().toString(),
@@ -133,8 +131,7 @@ class _MemoryPageState extends State<MemoryPage> {
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: AppColors.backColor(),
-          // 다이얼로그의 UI 구성
-          child: SingleChildScrollView( // 스크롤 가능한 다이얼로그 생성
+          child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -157,7 +154,6 @@ class _MemoryPageState extends State<MemoryPage> {
                             return Icon(Icons.error);
                           },
                         ),
-                      // 스크롤 가능한 텍스트를 위한 SingleChildScrollView 추가
                       SingleChildScrollView(
                         child: Text(
                           post['text'] ?? 'No Content',
@@ -168,10 +164,8 @@ class _MemoryPageState extends State<MemoryPage> {
                   ),
                 ),
                 SizedBox(height: 16),
-                // 닫기 버튼 추가
                 ElevatedButton(
                   onPressed: () {
-                    // 다이얼로그 닫기
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
@@ -186,4 +180,9 @@ class _MemoryPageState extends State<MemoryPage> {
       },
     );
   }
+
+  List<dynamic> _getEventsForDay(DateTime day) {
+    final events = _events[day] ?? [];
+    print("Events for $day: $events"); // 로깅
+    return events;  }
 }

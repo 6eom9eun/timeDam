@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-// 캘린더 위젯
-
 class Calendar2 extends StatefulWidget {
   final DateTime focusedDay;
   final DateTime selectedDay;
   final Function(DateTime) onDaySelected;
+  final List<dynamic> Function(DateTime) eventLoader; // 이벤트 로더 함수
 
   const Calendar2({
     Key? key,
     required this.focusedDay,
     required this.selectedDay,
     required this.onDaySelected,
-
+    required this.eventLoader, // 이벤트 로더 추가
   }) : super(key: key);
 
   @override
@@ -28,17 +27,17 @@ class _Calendar2State extends State<Calendar2> {
       selectedDayPredicate: (day) => isSameDay(widget.selectedDay, day),
       firstDay: DateTime(2022, 1, 1),
       lastDay: DateTime(2023, 12, 31),
-      rowHeight: 40, // 더 높은 행으로 좀 더 공간을 제공합니다.
-      daysOfWeekHeight: 20, // 요일 표시 부분의 높이를 늘렸습니다.
+      rowHeight: 40,
+      daysOfWeekHeight: 20,
       headerVisible: true,
       headerStyle: HeaderStyle(
-        titleCentered: true, // 제목을 중앙에 위치시킵니다.
+        titleCentered: true,
         titleTextStyle: TextStyle(
           color: Colors.black54,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
-        formatButtonVisible: false, // 달력 형식 변경 버튼을 숨깁니다.
+        formatButtonVisible: false,
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
         weekendStyle: TextStyle(color: Colors.redAccent),
@@ -54,11 +53,16 @@ class _Calendar2State extends State<Calendar2> {
           color: Colors.grey[700],
           shape: BoxShape.circle,
         ),
+        markerDecoration: BoxDecoration( // 마커 스타일 지정
+          color: Colors.blue,
+          shape: BoxShape.circle,
+        ),
       ),
       onDaySelected: (selectedDay, focusedDay) {
         widget.onDaySelected(selectedDay);
       },
       onPageChanged: widget.onDaySelected,
+      eventLoader: widget.eventLoader, // 이벤트 로더 설정
       calendarFormat: CalendarFormat.month,
     );
   }
