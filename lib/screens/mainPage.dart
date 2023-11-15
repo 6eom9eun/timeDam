@@ -18,10 +18,10 @@ class _MainPageState extends State<MainPage> {
   List<BottomNavigationBarItem> bottomItems = [
     BottomNavigationBarItem(
       icon: Icon(Icons.calendar_month),
-      label: '목록',
+      label: '달력',
     ),
     BottomNavigationBarItem(
-      label: '홈',
+      label: '추억',
       icon: Icon(Icons.home_filled, size: 30.0),
     ),
     BottomNavigationBarItem(
@@ -66,14 +66,20 @@ class _MainPageState extends State<MainPage> {
         ),
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Color(0xFFFFCF52),
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.grey.withOpacity(.60),
-          selectedFontSize: 14,
-          unselectedFontSize: 10,
+          backgroundColor: AppColors.primaryColor(),
+          selectedItemColor: AppColors.backColor(),
+          unselectedItemColor: Colors.black87,
+          selectedFontSize: 20,
+          unselectedFontSize: 20,
+          selectedLabelStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20, // You can also set font size here
+          ),
+          unselectedLabelStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
           currentIndex: _selectedIndex,
-          showUnselectedLabels: false,
-          showSelectedLabels: false,
           onTap: (int index) {
             setState(() {
               _selectedIndex = index;

@@ -15,6 +15,11 @@ import 'package:memo_re/models/weatherModel.dart';
 final FirebaseAuth auth = FirebaseAuth.instance;
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+// * ApiKey 배포 XXXXXXXXXXXXXXXXXX
+const kakaoApiKey = "9ed0df4a106dd50636a1ad5268d420cf";
+const openWeatherApiKey = "09530d1ccfae5c1d0f1d1d82d5027b94";
+// *
+
 // 백그라운드 위치 추적 설정 함수
 Future<void> initLocationState() async {
   // 백그라운드 fetch 구성
@@ -135,7 +140,7 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
 // 카카오 로컬 API를 통해 장소 검색하는 함수
 Future<List<VisitedPlaceModel>> getPlacesKakao(
     var placeNames, var latitude, var longitude) async {
-  var key = '9ed0df4a106dd50636a1ad5268d420cf'; // 배포 XXXXXXXXXXXXXXXXXXX
+  var key = kakaoApiKey;
   var baseUrl = "https://dapi.kakao.com/v2/local/search/keyword.json";
   List<VisitedPlaceModel> responses = [];
 
@@ -170,7 +175,7 @@ Future<List<VisitedPlaceModel>> getPlacesKakao(
 }
 
 Future<WeatherModel> getWeather(var latitude, var longitude) async {
-  var key = '09530d1ccfae5c1d0f1d1d82d5027b94'; // 배포 XXXXXXXXXXXXXXXXXXX
+  var key = openWeatherApiKey;
   var baseUrl = "https://api.openweathermap.org/data/2.5/weather";
   var url = Uri.parse(
       '$baseUrl?lat=$latitude&lon=$longitude&appid=$key&units=metric&lang=kr');

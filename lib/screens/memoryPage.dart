@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:memo_re/widgets/calendar2_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:memo_re/providers/memoryProvider.dart'; // MemoryProvider import
+import 'package:memo_re/providers/postProvider.dart';
 import 'package:memo_re/utils/vars.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MemoryPage extends StatefulWidget {
   const MemoryPage({super.key});
@@ -15,28 +16,98 @@ class MemoryPage extends StatefulWidget {
 class _MemoryPageState extends State<MemoryPage> {
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
+  Map<DateTime, List<dynamic>> _events = {}; // 날짜별 이벤트를 저장할 맵
+  List<dynamic> _selectedEvents = [];
 
   @override
   void initState() {
     super.initState();
-    Provider.of<MemoryProvider>(context, listen: false).fetchPostsForMonth(_selectedDay);
-    Provider.of<MemoryProvider>(context, listen: false).fetchPosts(_selectedDay);
+    _fetchPostsForMonth(_selectedDay); // 초기화할 때 한 달 동안의 게시물을 가져옵니다.
+    _fetchPosts(_selectedDay); // 초기화할 때 오늘 날짜의 게시물을 가져옵니다.
+  }
+
+  void _fetchPostsForMonth(DateTime month) async {
+    String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+    // Start of the month
+    DateTime startDate = DateTime(month.year, month.month, 1).toUtc();
+
+    // End of the month
+    DateTime endDate = DateTime(month.year, month.month + 1, 0, 23, 59, 59).toUtc();
+
+    try {
+      var querySnapshot = await FirebaseFirestore.instance
+          .collection('user')
+          .doc(userId)
+          .collection('posts')
+          .where('createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
+          .where('createdAt', isLessThanOrEqualTo: Timestamp.fromDate(endDate))
+          .get();
+
+      Map<DateTime, List<dynamic>> events = {};
+
+      for (var doc in querySnapshot.docs) {
+        DateTime postDate = (doc['createdAt'] as Timestamp).toDate();
+        DateTime postDateUtc = DateTime.utc(postDate.year, postDate.month, postDate.day);
+
+        if (events[postDateUtc] == null) {
+          events[postDateUtc] = [];
+        }
+        events[postDateUtc]!.add(doc.data());
+      }
+
+      if (mounted) {
+        setState(() {
+          _events = events; // Update events for the entire month
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
+  void _fetchPosts(DateTime date) async {
+    String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+    DateTime startDate = DateTime(date.year, date.month, date.day).toUtc();
+    DateTime endDate = DateTime(date.year, date.month, date.day, 23, 59, 59).toUtc();
+
+    try {
+      var querySnapshot = await FirebaseFirestore.instance
+          .collection('user')
+          .doc(userId)
+          .collection('posts')
+          .where('createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
+          .where('createdAt', isLessThanOrEqualTo: Timestamp.fromDate(endDate))
+          .get();
+
+      List<dynamic> newEvents = [];
+      for (var doc in querySnapshot.docs) {
+        newEvents.add(doc.data());
+      }
+
+      if (mounted) {
+        setState(() {
+          _events[_selectedDay] = newEvents; // Update events for the selected date
+          _selectedEvents = newEvents;
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   void _onDaySelected(DateTime selectedDay) {
     setState(() {
       _selectedDay = selectedDay;
       _focusedDay = selectedDay;
+      _selectedEvents = _events[selectedDay] ?? [];
     });
-    Provider.of<MemoryProvider>(context, listen: false).fetchPosts(selectedDay);
+    _fetchPosts(selectedDay); // Fetch posts only for the selected date
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<MemoryProvider>(context);
-    final _events = provider.events;
-    final _selectedEvents = _events[_selectedDay] ?? [];
-
     return Scaffold(
       backgroundColor: AppColors.backColor(),
       body: Center(
@@ -47,7 +118,7 @@ class _MemoryPageState extends State<MemoryPage> {
               focusedDay: _focusedDay,
               selectedDay: _selectedDay,
               onDaySelected: _onDaySelected,
-              eventLoader: (day) => _getEventsForDay(day, _events), // 이벤트 로더 수정
+              eventLoader: _getEventsForDay, // 이벤트 로더 추가
             ),
             Expanded(
               child: _selectedEvents.isNotEmpty
@@ -167,7 +238,8 @@ class _MemoryPageState extends State<MemoryPage> {
     );
   }
 
-  List<dynamic> _getEventsForDay(DateTime day, Map<DateTime, List<dynamic>> events) {
-    return events[day] ?? [];
-  }
+  List<dynamic> _getEventsForDay(DateTime day) {
+    final events = _events[day] ?? [];
+    print("Events for $day: $events"); // 로깅
+    return events;  }
 }
