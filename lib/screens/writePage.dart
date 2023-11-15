@@ -1,19 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:memo_re/screens/InputPage.dart';
 import 'package:memo_re/screens/ImageInputPage.dart';
 import 'package:memo_re/screens/voicePage.dart';
 import 'package:memo_re/utils/vars.dart';
-import 'package:provider/provider.dart';
-import 'package:memo_re/providers/postProvider.dart';
-import 'package:http/http.dart' as http;
-import 'DisplayMemoryPage.dart';
-import 'package:memo_re/screens/CreatingPage.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 // 게시물 올리기, 추억 생성
@@ -36,133 +25,7 @@ class WritePage extends StatefulWidget {
 }
 
 class _WritePageState extends State<WritePage> {
-  File? _image;
-  final picker = ImagePicker();
-  TextEditingController _textController = TextEditingController();
-  bool hasImage = false; // New state variable
   bool showInputOptions = false;
-
-  Future getText() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('추억 생성'),
-          content: TextFormField(
-            controller: _textController,
-            decoration: InputDecoration(
-              labelText: '추억하고 싶은 단어를 입력해주세요',
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('취소'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('확인'),
-              onPressed: () async {
-                final inputText = _textController.text;
-                print('입력된 텍스트: $inputText');
-                // Navigator.of(context).pop();
-
-                // CreatingPage로 이동하여 로딩 화면을 표시
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CreatingPage(),
-                    fullscreenDialog: true, // 전체 화면 다이얼로그로 엽니다.
-                  ),
-                );
-
-                // 서버로 데이터를 전송하고 응답을 기다립니다.
-                final response = await http.post(
-                  Uri.parse('http://192.168.123.111:5000'), // 추후 플라스크 서버 URL 입력
-                  body: {'text': inputText}, // POST 요청으로 보낼 데이터
-                );
-
-                if (response.statusCode == 200) {
-                  final data = json.decode(response.body);
-                  generatedMemory = data['memory'];
-                  image_url = data['image_url'];
-
-                  // 데이터를 성공적으로 받아온 후 DisplayMemoryPage로 이동
-                  Navigator.of(context).pop(); // 로딩 화면 닫기
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          DisplayMemoryPage(
-                            memory: generatedMemory,
-                            imageUrl: image_url,
-                          ),
-                    ),
-                  );
-                } else {
-                  print('데이터 전송 실패: ${response.statusCode}');
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future getImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
-    });
-  }
-
-  Future uploadFile() async {
-    if (_image == null) return;
-    final fileName = _image!.path.split('/').last;
-    final destination = 'images/$fileName';
-
-    try {
-      final ref = FirebaseStorage.instance.ref(destination);
-      await ref.putFile(_image!);
-      final url = await ref.getDownloadURL();
-
-      // 현재 로그인한 사용자의 UID 가져오기
-      final uid = FirebaseAuth.instance.currentUser?.uid;
-      if (uid == null) { // 회원 아니면 X
-        print('Error: User is not logged in');
-        return;
-      }
-
-      // 사용자의 UID를 사용하여 Firestore에 게시물 정보들을 저장합니다.
-      CollectionReference userPostsRef = FirebaseFirestore.instance.collection('user').doc(uid).collection('posts');
-
-      // Firestore에 새로운 게시물 문서를 추가하고 postId를 저장합니다.
-      DocumentReference postDocRef = await userPostsRef.add({
-        'imageUrl': url,
-        'text': _textController.text,
-        'createdAt': FieldValue.serverTimestamp(),
-        // 'uid'와 'postId' 필드는 이제 필요 없습니다.
-        // 각 사용자의 'posts' 서브컬렉션 안에 문서들이 저장되기 때문입니다.
-      });
-
-      // 생성된 문서 ID(postId)를 변수로 저장할 필요가 없습니다.
-      // 필요하다면 `postDocRef.id`를 사용하여 얻을 수 있습니다.
-
-      Provider.of<PostProvider>(context, listen: false).imageUrl = url;
-      print('File uploaded to Firebase Storage and Firestore! URL: $url, UID: $uid, PostID: ${postDocRef.id}');
-    } catch (e) {
-      print('uploadFile error: $e');
-    }
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -197,17 +60,6 @@ class _WritePageState extends State<WritePage> {
                           offset: Offset(0, 2),
                         ),
                       ],
-
-                      // 그라데이션 코드
-                      // gradient: LinearGradient(
-                      //   begin: Alignment.topLeft,
-                      //   end: Alignment.bottomRight,
-                      //   colors: [
-                      //     AppColors.primaryColor1().withOpacity(0.8),
-                      //     AppColors.primaryColor(),
-                      //   ],
-                      // ),
-
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min, // To make the container wrap its content
@@ -255,55 +107,6 @@ class _WritePageState extends State<WritePage> {
                                 color: Colors.black,
                                 fontFamily: 'Cafe',
                                 fontSize: 20,
-                              ),
-                            ),
-                          ),
-                        ],
-                        if (showInputOptions) ...[
-                          if (hasImage) ...[
-                            ElevatedButton(
-                              onPressed: getImage,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.primaryColor(),
-                                foregroundColor: Colors.black,
-                              ),
-                              child: Icon(Icons.image, size: 50,),
-                            ),
-                            SizedBox(height: 20),
-                          ],
-                          ElevatedButton(
-                            onPressed: getText,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primaryColor(),
-                              foregroundColor: Colors.black,
-                            ),
-                            child: Icon(Icons.keyboard, size: 50,),
-                          ),
-                          SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed:
-                                requestMicrophonePermission,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primaryColor(),
-                              foregroundColor: Colors.black,
-                            ),
-                            child: Icon(Icons.mic, size: 50,),
-                          ),
-                          SizedBox(height: 20),
-                          // Confirmation button
-                          ElevatedButton(
-                            onPressed: () {
-                              // Add your confirmation logic here
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primaryColor(),
-                              foregroundColor: Colors.black,
-                            ),
-                            child: Text(
-                              '확인',
-                              style: TextStyle(
-                                  fontSize: 26,
-                                fontFamily: 'Cafe',
                               ),
                             ),
                           ),
