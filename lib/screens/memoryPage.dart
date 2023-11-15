@@ -157,12 +157,27 @@ class _MemoryPageState extends State<MemoryPage> {
                   );
                 },
               )
-                  : Center(
-                child: Text('기록된 추억이 없습니다.'),
+                  : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '기록된 추억이 없어요.',
+                    style: TextStyle(
+                      fontSize: 30,
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  Image.asset(
+                    'assets/logo.png', // 이미지 파일 경로
+                    width: 80, // 이미지 크기 조정
+                    height: 80,
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+              ],
+            ),
       ),
     );
   }
