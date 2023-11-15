@@ -22,13 +22,55 @@ class _MemoryPageState extends State<MemoryPage> {
   @override
   void initState() {
     super.initState();
+    _fetchPostsForMonth(_selectedDay); // 초기화할 때 한 달 동안의 게시물을 가져옵니다.
     _fetchPosts(_selectedDay); // 초기화할 때 오늘 날짜의 게시물을 가져옵니다.
   }
 
+  void _fetchPostsForMonth(DateTime month) async {
+    String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+    // Start of the month
+    DateTime startDate = DateTime(month.year, month.month, 1).toUtc();
+
+    // End of the month
+    DateTime endDate = DateTime(month.year, month.month + 1, 0, 23, 59, 59).toUtc();
+
+    try {
+      var querySnapshot = await FirebaseFirestore.instance
+          .collection('user')
+          .doc(userId)
+          .collection('posts')
+          .where('createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
+          .where('createdAt', isLessThanOrEqualTo: Timestamp.fromDate(endDate))
+          .get();
+
+      Map<DateTime, List<dynamic>> events = {};
+
+      for (var doc in querySnapshot.docs) {
+        DateTime postDate = (doc['createdAt'] as Timestamp).toDate();
+        DateTime postDateUtc = DateTime.utc(postDate.year, postDate.month, postDate.day);
+
+        if (events[postDateUtc] == null) {
+          events[postDateUtc] = [];
+        }
+        events[postDateUtc]!.add(doc.data());
+      }
+
+      if (mounted) {
+        setState(() {
+          _events = events; // Update events for the entire month
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
   void _fetchPosts(DateTime date) async {
     String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
-    DateTime startDate = DateTime(date.year, date.month, date.day).toUtc(); // UTC로 변환
-    DateTime endDate = DateTime(date.year, date.month, date.day, 23, 59, 59).toUtc(); // 하루의 마지막 시간으로 설정 및 UTC로 변환
+    DateTime startDate = DateTime(date.year, date.month, date.day).toUtc();
+    DateTime endDate = DateTime(date.year, date.month, date.day, 23, 59, 59).toUtc();
 
     try {
       var querySnapshot = await FirebaseFirestore.instance
@@ -46,22 +88,22 @@ class _MemoryPageState extends State<MemoryPage> {
 
       if (mounted) {
         setState(() {
-          _events[date] = newEvents; // 날짜를 UTC로 변환하지 않음
+          _events[_selectedDay] = newEvents; // Update events for the selected date
           _selectedEvents = newEvents;
         });
       }
     } catch (e) {
-      print(e); // 오류 출력
+      print(e);
     }
   }
 
   void _onDaySelected(DateTime selectedDay) {
     setState(() {
       _selectedDay = selectedDay;
-      _focusedDay = selectedDay; // 포커스된 날짜 업데이트
+      _focusedDay = selectedDay;
       _selectedEvents = _events[selectedDay] ?? [];
     });
-    _fetchPosts(selectedDay); // 선택된 날짜의 게시물 가져오기
+    _fetchPosts(selectedDay); // Fetch posts only for the selected date
   }
 
   @override

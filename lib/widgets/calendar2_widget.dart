@@ -53,9 +53,21 @@ class _Calendar2State extends State<Calendar2> {
           color: Colors.grey[700],
           shape: BoxShape.circle,
         ),
-        markerDecoration: BoxDecoration( // 마커 스타일 지정
-          color: Colors.blue,
-          shape: BoxShape.circle,
+        markerDecoration: BoxDecoration(
+          gradient: RadialGradient(
+            colors: [Colors.blue, Colors.lightBlueAccent],
+          ),
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(color: Colors.white, width: 1),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 1,
+              offset: Offset(0, 1), // changes position of shadow
+            ),
+          ],
         ),
       ),
       onDaySelected: (selectedDay, focusedDay) {
