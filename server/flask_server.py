@@ -10,7 +10,7 @@ import os
 
 app = Flask(__name__)
 
-api_key= "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"
+api_key= "apiKey"
 
 @app.route('/', methods=['POST'])
 def generate_memory():

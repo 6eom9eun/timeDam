@@ -16,8 +16,8 @@ final FirebaseAuth auth = FirebaseAuth.instance;
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 // * ApiKey 배포 XXXXXXXXXXXXXXXXXX
-const kakaoApiKey = "9ed0df4a106dd50636a1ad5268d420cf";
-const openWeatherApiKey = "09530d1ccfae5c1d0f1d1d82d5027b94";
+const kakaoApiKey = "kakaoApiKey";
+const openWeatherApiKey = "openWeatherApiKey";
 // *
 
 // 백그라운드 위치 추적 설정 함수
